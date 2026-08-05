@@ -1,0 +1,231 @@
+# LimeCasino math toolkit (player-facing)
+
+This folder is meant to be shared with the community so anyone can **independently validate** the published LimeCasino odds.
+
+Any changes we make to casinos in-game will be reflected in this repository so you can continue to validate.
+
+| File | Role |
+| --- | --- |
+| [`tools/casino_math.py`](tools/casino_math.py) | Exact RTP + Monte Carlo + **item hunt** calculator |
+| [`presets/*.json`](presets/) | Canonical machine configs (what staff load in the toolgun) |
+| This README | How the Python mirrors the live Lua, and how to run checks |
+
+You do **not** need Garry’s Mod installed. You need **Python 3.10+** (stdlib only).
+
+```bash
+cd addons/pcasino/tools
+python3 casino_math.py --spins 200000
+python3 casino_math.py --list-items
+python3 casino_math.py --hunt bmwm3gtr46 --skip-rtp
+python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine advanced_mid --machine advanced_high --skip-rtp
+```
+
+---
+
+## Design goals (what “fair” means here)
+
+1. **Every slot targets ~95% cash RTP** (≈5% house edge on money).
+2. **Mystery Wheel items are not cash.** Cars / Dragon’s Breath / Rolex / etc. are prestige. Bound prizes use hidden `tradable=false` item meta so they cannot be given, dropped, or inventory-sold (Trabbi is the exception — still tradable as the joke prize).
+3. **Hunting a specific single-segment Mystery item costs about the same expected cash on every advanced machine** (~$7.5M wagered / ~$375k expected net loss).
+4. **Cheaper machines are slower**, not cheaper (per-spin odds scale with bet).
+
+---
+
+## How live Lua works (and how Python mirrors it)
+
+pCasino does **not** use real reel strips or a hidden RTP field. Odds are whatever weights/combos/wheel segments are saved on the entity. Our presets encode those settings in JSON; the simulator implements the **same rules** as the Lua.
+
+### 1) Taking the bet
+
+**Lua** (`pcasino_slot_machine` / `pcasino_wheel_slot_machine` `StartRound`):
+
+- `CanAfford` → `AddMoney(-bet)`
+- If jackpots enabled: `jackpot += bet * betAdd`
+
+**Python:** every simulated spin spends `bet` and grows the pot the same way.
+
+### 2) Picking three reel symbols
+
+**Lua** (`GenerateResult`):
+
+```lua
+-- chance[symbol] is an integer weight
+for symbol, weight in pairs(self.data.chance) do
+    for i = 1, weight do table.insert(pool, symbol) end
+end
+return table.Random(pool)  -- independent draw per reel
+```
+
+**Python:** build the same multiset pool; `random.choice` three times.  
+Per-reel probability of symbol `s` is `weight[s] / sum(weights)`.
+
+### 3) Choosing the winning combo
+
+**Lua** (`CheckForCombo`): walk the combo list; keep the best match. Patterns may use `"anything"`. If jackpots are on, a jackpot/`j=true` combo beats a cash combo when both match (chest / dollar lines).
+
+**Python:** `pick_combo()` copies that preference order (`j` preferred, else higher `p`).
+
+### 4) Cash line payout
+
+**Lua:**
+
+```lua
+baseWinnings = bet + bet * tonumber(win.p)   -- i.e. bet * (1 + p)
+AddMoney(baseWinnings)
+```
+
+**Python:** same multiplier.  
+`p = 0.5` ⇒ get **1.5× stake** back (net +0.5 bet if you ignore the stake already taken).
+
+### 5) Jackpots and the `startValue` footgun
+
+**Lua:**
+
+- Each spin contributes `bet * betAdd` into the pot.
+- On a jackpot award, pay `GetCurrentJackpot()`, then **reset pot to `startValue`**.
+
+That reset **creates** `startValue` dollars every cycle (not player money). Exact RTP must include:
+
+```text
+jackpot RTP = betAdd + P(jackpot award) * startValue / bet
+```
+
+**Python** uses that formula (basic slots) and the equivalent pot average for mini-wheel jackpot segments (advanced).
+
+### 6) Advanced mini-wheel (12 segments, uniform)
+
+**Lua** (`pcasino_wheel_slot_machine` `StartSpin`):
+
+```lua
+local result = math.random(12)
+local winData = self.data.wheel[result]
+RewardsFunctions[winData.f](ply, ent, winData.i)
+```
+
+Chest combos (`j=true`) do **not** pay line cash; they queue this wheel.
+
+| `f` | Meaning in our presets |
+| --- | --- |
+| `money` | Pay `i` dollars |
+| `jackpot` | Pay machine pot, reset to `startValue` |
+| `nothing` | No cash |
+| `prize_wheel` | Grant one Mystery / Big Wheel free spin |
+
+**Python:** `math.random(12)` → `rng.randrange(12)`; same reward table.
+
+### 7) Mystery / Big Wheel (20 segments, uniform, free-spin only)
+
+**Lua:** `math.random(20)` over `data.wheel`. Our preset sets `buySpin.buy = false`.
+
+**Spin Again** is `f = "prize_wheel"` again (recursive free spin).
+
+**Python** cash EV of one activation (items = $0):
+
+```text
+E_cash = (sum of money segment amounts) / (20 - number_of_spin_again_segments)
+```
+
+Probability a free spin **eventually** awards a specific item with `k` matching segments and `r` Spin Again segments:
+
+```text
+P(item | free spin) = k / (20 - r)
+```
+
+(With one M3 segment and one Spin Again: `1/19`.)
+
+### 8) End-to-end item hunt probability
+
+On an advanced machine:
+
+```text
+P(item on one paid spin)
+  = P(mini-wheel)                 -- chest appears (bonus_rate)
+  * (BigWheelSegments / 12)       -- mini lands prize_wheel
+  * P(item | Mystery activation)  -- absorbing prob above
+```
+
+Then:
+
+```text
+E[spins until first item] = 1 / P
+E[money wagered]          = E[spins] * bet
+E[cash returned]          = E[wagered] * RTP
+E[net cash]               = E[cash returned] - E[wagered]   # ≈ -5% of wagered
+```
+
+Geometric distribution ⇒ **median** spins ≈ `ln(2) / P` (often much lower than the mean).
+
+---
+
+## Commands
+
+### Full RTP validation
+
+```bash
+python3 casino_math.py --spins 500000
+```
+
+Prints exact RTP, hit rate, volatility label, Monte Carlo check, and a rough floor stress mix. Exit code `1` if any machine is outside **95% ± 0.5pp**.
+
+### Item hunt
+
+```bash
+python3 casino_math.py --list-items
+python3 casino_math.py --hunt bmwm3gtr46 --skip-rtp
+python3 casino_math.py --hunt vape_dragonsbreath --skip-rtp --hunt-trials 3000
+python3 casino_math.py --hunt bmwm3gtr46 --machine advanced_high --skip-rtp
+```
+
+Shows, per advanced machine:
+
+- chance per spin / “1 in N”
+- exact expected spins, wagered, cash back, **net cash**
+- exact median estimate
+- optional Monte Carlo distribution (mean / median / p25 / p75)
+
+### Regenerate Lua (staff only)
+
+```bash
+python3 casino_math.py --emit-lua ../lua/perfectcasino/config/sh_presets.lua --skip-rtp
+```
+
+JSON is canonical; `sh_presets.lua` is a generated mirror for the game.
+
+---
+
+## Reading the JSON presets
+
+Each `presets/<id>.json` has:
+
+- `settings` — exact pCasino toolgun payload (`bet`, `chance`, `combo`, `jackpot`, `wheel`, …)
+- `math` — published RTP / payline probabilities (what `/odds` shows in-game)
+- `hunt` (advanced) — equalized expected wager target for single-segment items
+
+Machine ids:
+
+`basic_low`, `basic_mid`, `basic_high`, `advanced_low`, `advanced_mid`, `advanced_high`, `mystery_wheel`
+
+---
+
+## FAQ
+
+**Why isn’t Adv Low the same chance as Adv High?**  
+Because bets differ. Low has **1/12** Big Wheel mini-segments and a lower chest rate; High has **3/12** and a higher chest rate. Per-spin odds scale with bet so **expected dollars** to an item stay aligned.
+
+**Was it always equalized?**  
+No. An earlier draft made Adv Low the *most expensive* hunt in expected dollars. Current presets retune chest weights so E[wagered] ≈ **$7.5M** on all three advanced machines for any single-segment Mystery item.
+
+**Does winning the M3 count as cash RTP?**  
+No. You still “pay” via the ~5% house edge on all the cash you cycled to get there.
+
+**What about the $500k Mystery cash prize?**  
+It’s real money and is included in Mystery cash EV (~$49k per spin including respins). Advanced machines were retuned so overall cash RTP stays ~95%.
+
+**Casino-bound items**  
+i8, Gold Rolex, Stolen Police Uniform, and Magical Cake are granted with hidden metadata `tradable=false`. Give / drop / inventory-sell are blocked. Trabbi is not bound. M3 / Ninja / Dragon’s Breath / Golden Vape are already locked in their item definitions.
+
+**Can I change the JSON and re-check?**  
+Yes. Edit a preset, re-run `casino_math.py`. If you only care about hunts: `--hunt … --skip-rtp`.
+
+**In-game `/odds`**  
+Shows the same published `math` block players get from these files — so the sheet and the game stay in sync when staff place machines from these presets.
