@@ -125,6 +125,8 @@ Chest combos (`j=true`) do **not** pay line cash; they queue this wheel.
 
 **Python:** `math.random(12)` → `rng.randrange(12)`; same reward table.
 
+**Segment order is cosmetic.** `math.random(N)` draws a uniform index, so no position is more or less likely than any other — reordering the `wheel` array changes nothing about RTP, hit rate, or item odds. It only changes which segment a player sees next to which as the needle spins past. The mini-wheel is arranged `[lowest filler] → Jackpot → Nothing → Big Wheel → [lowest filler] → …` (interleaving the remaining cash tiers low/high) so the two rare, exciting outcomes are framed by the two least eventful ones, then the rest alternates small/large cash going around. Confirmed order-invariant by rebuilding `math` from the reordered array and diffing against the original — RTP matched to the same six decimal places both times.
+
 ### 7) Mystery / Big Wheel (20 segments, uniform, free-spin only)
 
 Two of the twenty segments are **Spin Again**, so an activation resolves against **18** absorbing segments. Published per-segment odds are quoted as `k/18` — the chance the activation *eventually* lands that segment, which is what a player experiences. Quoting `k/20` understates every real rate.
@@ -146,6 +148,8 @@ P(item | free spin) = k / (20 - r)
 ```
 
 (With one M3 segment and two Spin Again segments: `1/18`.)
+
+**Segment order here is cosmetic too**, same reasoning as the mini-wheel. The wheel opens with a fixed ten-segment run through the named prizes (Golden Vape, $25k, M3 GTR, Magical Cake, i8, $1, Ninja, $50k, Dragon's Breath, Trabbi — deliberately mixing grand prizes with the $1/Trabbi joke outcomes, not clustering the "good" ones together), then the remaining ten alternate cash/Rolex wins with Nothing/$5k/Police Uniform/Magical Cake letdowns, with the two Spin Again segments five slots apart (a quarter of the wheel) so hitting one is never a sign the other is close.
 
 ### 8) End-to-end item hunt probability
 
