@@ -92,6 +92,8 @@ jackpot RTP = betAdd + P(jackpot award) * startValue / bet
 
 **Python** uses that formula (basic slots) and the equivalent pot average for mini-wheel jackpot segments (advanced).
 
+On a **basic** slot the jackpot combo pays the line *and* the pot — `AddMoney(bet + bet*p)` runs before `AddMoney(jackpot)` — so the stake comes back on top of the pot. Every jackpot combo in these presets has `p = 0`, making that exactly one stake. Advanced machines differ: the chest pays no line cash at all, it only queues the mini-wheel.
+
 ### 6) Advanced mini-wheel (12 segments, uniform)
 
 **Lua** (`pcasino_wheel_slot_machine` `StartSpin`):
@@ -165,7 +167,29 @@ Geometric distribution ⇒ **median** spins ≈ `ln(2) / P` (often much lower th
 python3 casino_math.py --spins 500000
 ```
 
-Prints exact RTP, hit rate, volatility label, Monte Carlo check, and a rough floor stress mix. Exit code `1` if any machine is outside **95% ± 0.5pp**.
+Prints exact RTP, hit rate, volatility label, Monte Carlo check, a **session P&L spread**, and a rough floor stress mix. Exit code `1` if any machine is outside **95% ± 0.5pp**.
+
+### Session P&L spread (how bad can one evening get?)
+
+RTP is a long-run average. It says nothing about what a single session looks like, and an RP economy experiences sessions, not limits. Every machine now also reports the distribution of **house** profit over a session:
+
+```text
+advanced_high  bet=$25,000  RTP=94.95%  hit=30.5%  vol=medium-high (CV=6.14)
+    session P&L (1,000 spins = $25,000,000 wagered, 2,000 sims):
+      worst 1% $   -10,384,852   p05 $    -7,639,226   median $   +1,528,847   p95 $   +8,530,324
+      mean $    +1,161,589 (4.65% of wagered)   P(house down) = 38.6%
+```
+
+Read that as: the edge is a real 5%, and the house still finishes down on **38.6%** of thousand-spin sessions, with a 1-in-100 session costing over **$10M**. A 121.2× top line on a $25,000 stake means one spin can pay $3.03M.
+
+```bash
+python3 casino_math.py --session-spins 2000 --session-trials 5000   # deeper sample
+python3 casino_math.py --session-trials 0                           # skip it (faster)
+```
+
+Defaults are 1,000 spins × 2,000 simulated sessions per machine, which is roughly one dedicated player for an hour.
+
+How it works: the tool builds the **exact** finite distribution of house profit for a single spin — every reel combo, every mini-wheel segment, and the Mystery Wheel's absorbing cash distribution — then samples sessions from it. Jackpots are drawn from their real steady-state distribution (`start + step × G`, `G ~ Geometric(p_award)`) rather than pinned at the average, so pot-driven tails show up honestly. The distribution's analytic mean is asserted against the exact RTP on every run; a mismatch fails the tool rather than printing a plausible-looking percentile.
 
 ### Item hunt
 
