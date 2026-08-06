@@ -1,0 +1,54 @@
+Wrote analysis_out/rtp_deep.json
+=== Mystery Wheel ===
+  Cash EV / spin: $51,666.72
+  P(any item | activation): 55.56%   P(any grand prize): 16.67%   (quoted against 18 non-respin segments)
+  Items: Trabbi, vape_golden, vape_dragonsbreath, bmwm3gtr46, kawasakininja, veh_bmwi8, uniform_police, newfood_magical_cake, newfood_magical_cake, rolex0
+
+=== Machines ===
+advanced_high  bet=$25,000  RTP=92.00%  MC=92.76%  hit=30.4%  vol=medium (CV=3.74)
+    bonus=9.71%  P(free/spin)=0.809%  mini free segs=1/12  avgJP=$117,655
+    session P&L (1,000 spins = $25,000,000 wagered, 5,000 sims):
+      worst 1% $    -4,904,852   p05 $    -2,715,708   median $   +2,084,322   p95 $   +6,401,492
+      mean $    +1,967,977 (7.87% of wagered)   P(house down) = 24.0%
+advanced_low  bet=$5,000  RTP=92.00%  MC=92.36%  hit=29.4%  vol=medium (CV=2.83)
+    bonus=1.93%  P(free/spin)=0.161%  mini free segs=1/12  avgJP=$98,148
+    session P&L (1,000 spins = $5,000,000 wagered, 5,000 sims):
+      worst 1% $      -804,286   p05 $      -428,174   median $     +433,778   p95 $   +1,141,250
+      mean $      +405,594 (8.11% of wagered)   P(house down) = 19.6%
+advanced_mid  bet=$10,000  RTP=92.00%  MC=92.42%  hit=29.2%  vol=medium (CV=3.26)
+    bonus=3.97%  P(free/spin)=0.331%  mini free segs=1/12  avgJP=$100,754
+    session P&L (1,000 spins = $10,000,000 wagered, 5,000 sims):
+      worst 1% $    -1,701,004   p05 $      -931,408   median $     +854,618   p95 $   +2,387,774
+      mean $      +799,281 (7.99% of wagered)   P(house down) = 21.0%
+basic_high  bet=$2,500  RTP=95.00%  MC=94.53%  hit=15.9%  vol=low-medium (CV=5.37)
+    JP hit=0.1372%  eq.avgJP@hit=$121,850
+    session P&L (1,000 spins = $2,500,000 wagered, 5,000 sims):
+      worst 1% $    -1,051,655   p05 $      -642,998   median $     +155,179   p95 $     +775,701
+      mean $      +121,609 (4.86% of wagered)   P(house down) = 36.4%
+basic_low  bet=$500  RTP=95.00%  MC=95.44%  hit=27.3%  vol=low (CV=3.10)
+    JP hit=0.0794%  eq.avgJP@hit=$27,694
+    session P&L (1,000 spins = $500,000 wagered, 5,000 sims):
+      worst 1% $      -134,973   p05 $       -73,203   median $      +29,561   p95 $      +98,032
+      mean $       +23,283 (4.66% of wagered)   P(house down) = 29.0%
+basic_mid  bet=$1,000  RTP=95.00%  MC=96.20%  hit=23.1%  vol=low-medium (CV=4.12)
+    JP hit=0.1057%  eq.avgJP@hit=$52,322
+    session P&L (1,000 spins = $1,000,000 wagered, 5,000 sims):
+      worst 1% $      -324,946   p05 $      -190,018   median $      +57,970   p95 $     +242,936
+      mean $       +46,571 (4.66% of wagered)   P(house down) = 33.7%
+
+=== RTP Checks (each machine's own target ±0.5pp) ===
+  [OK] advanced_high: 92.00% vs target 92%  vol=medium (target medium)
+  [OK] advanced_low: 92.00% vs target 92%  vol=medium (target medium)
+  [OK] advanced_mid: 92.00% vs target 92%  vol=medium (target medium)
+  [OK] basic_high: 95.00% vs target 95%  vol=low-medium (target low-medium)
+  [OK] basic_low: 95.00% vs target 95%  vol=low (target low)
+  [OK] basic_mid: 95.00% vs target 95%  vol=low-medium (target low-medium)
+
+=== Economy stress (~4.0h heavy floor) ===
+  House net: $1,867,871
+    basic_low: $312
+    basic_mid: $193,848
+    basic_high: $221,350
+    advanced_low: $175,518
+    advanced_mid: $415,776
+    advanced_high: $861,068

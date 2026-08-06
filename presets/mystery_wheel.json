@@ -6,7 +6,7 @@
   "volatility_target": "high",
   "bet": 0,
   "target_rtp": null,
-  "notes": "Free-spin only. Top cash $500k. Bound prizes (i8, Rolex, Police Uniform, Magical Cake) grant with tradable=false meta. Trabbi stays tradable.",
+  "notes": "Free-spin only. Top cash $500k. Two Spin Again segments. One Nothing segment and the $1 / Trabbi joke prizes are deliberate -- there is always a chance to walk away with nothing. Bound prizes (i8, Rolex, Police Uniform, Magical Cake) grant with tradable=false meta.",
   "settings": {
     "general": {
       "useFreeSpins": true
@@ -23,10 +23,10 @@
         "p": "melon"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
+        "n": "Spin Again",
+        "f": "prize_wheel",
         "i": 0,
-        "p": "melon"
+        "p": "mystery_1"
       },
       {
         "n": "$1",
@@ -139,9 +139,9 @@
     ]
   },
   "math": {
-    "cash_ev": 48947.42105263158,
+    "cash_ev": 51666.72222222222,
     "raw_money_sum": 930001.0,
-    "respin_segments": 1,
+    "respin_segments": 2,
     "item_ids": [
       "Trabbi",
       "vape_golden",
@@ -154,7 +154,7 @@
       "newfood_magical_cake",
       "rolex0"
     ],
-    "p_grand_prize": 0.15,
+    "p_grand_prize": 0.16666666666666666,
     "segments": [
       {
         "label": "Nothing",
@@ -164,11 +164,11 @@
         "cash": 0
       },
       {
-        "label": "Nothing",
-        "f": "nothing",
+        "label": "Spin Again",
+        "f": "prize_wheel",
         "i": 0,
         "p": 0.05,
-        "cash": 0
+        "cash": "respin"
       },
       {
         "label": "$1",
@@ -309,18 +309,7 @@
     ],
     "volatility_label": "high",
     "segment_probability": 0.05,
-    "grand_prizes": [
-      "vape_dragonsbreath",
-      "bmwm3gtr46",
-      "kawasakininja"
-    ],
-    "bound_prizes": [
-      "veh_bmwi8",
-      "rolex0",
-      "uniform_police",
-      "newfood_magical_cake"
-    ],
-    "p_any_item": 0.5,
-    "absorbing_denominator": 19
+    "p_any_item": 0.5555555555555556,
+    "absorbing_denominator": 18
   }
 }

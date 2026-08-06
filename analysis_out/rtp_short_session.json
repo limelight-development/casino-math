@@ -1,0 +1,1281 @@
+{
+  "mystery_wheel": {
+    "cash_ev": 51666.72222222222,
+    "raw_money_sum": 930001.0,
+    "respin_segments": 2,
+    "absorbing_denominator": 18,
+    "item_ids": [
+      "Trabbi",
+      "vape_golden",
+      "vape_dragonsbreath",
+      "bmwm3gtr46",
+      "kawasakininja",
+      "veh_bmwi8",
+      "uniform_police",
+      "newfood_magical_cake",
+      "newfood_magical_cake",
+      "rolex0"
+    ],
+    "segment_probability": 0.05,
+    "p_any_item": 0.5555555555555556,
+    "p_grand_prize": 0.16666666666666666,
+    "segments": [
+      {
+        "label": "Nothing",
+        "f": "nothing",
+        "i": 0,
+        "p": 0.05,
+        "cash": 0
+      },
+      {
+        "label": "Spin Again",
+        "f": "prize_wheel",
+        "i": 0,
+        "p": 0.05,
+        "cash": "respin"
+      },
+      {
+        "label": "$1",
+        "f": "money",
+        "i": 1,
+        "p": 0.05,
+        "cash": 1.0
+      },
+      {
+        "label": "$5,000",
+        "f": "money",
+        "i": 5000,
+        "p": 0.05,
+        "cash": 5000.0
+      },
+      {
+        "label": "$25,000",
+        "f": "money",
+        "i": 25000,
+        "p": 0.05,
+        "cash": 25000.0
+      },
+      {
+        "label": "$50,000",
+        "f": "money",
+        "i": 50000,
+        "p": 0.05,
+        "cash": 50000.0
+      },
+      {
+        "label": "$100,000",
+        "f": "money",
+        "i": 100000,
+        "p": 0.05,
+        "cash": 100000.0
+      },
+      {
+        "label": "$250,000",
+        "f": "money",
+        "i": 250000,
+        "p": 0.05,
+        "cash": 250000.0
+      },
+      {
+        "label": "$500,000",
+        "f": "money",
+        "i": 500000,
+        "p": 0.05,
+        "cash": 500000.0
+      },
+      {
+        "label": "Spin Again",
+        "f": "prize_wheel",
+        "i": 0,
+        "p": 0.05,
+        "cash": "respin"
+      },
+      {
+        "label": "Trabbi",
+        "f": "cityrp_giveitem",
+        "i": "Trabbi",
+        "p": 0.05,
+        "cash": 0,
+        "item": "Trabbi"
+      },
+      {
+        "label": "Golden Vape",
+        "f": "cityrp_giveitem",
+        "i": "vape_golden",
+        "p": 0.05,
+        "cash": 0,
+        "item": "vape_golden"
+      },
+      {
+        "label": "Dragon's Breath",
+        "f": "cityrp_giveitem",
+        "i": "vape_dragonsbreath",
+        "p": 0.05,
+        "cash": 0,
+        "item": "vape_dragonsbreath"
+      },
+      {
+        "label": "BMW M3 GTR",
+        "f": "cityrp_giveitem",
+        "i": "bmwm3gtr46",
+        "p": 0.05,
+        "cash": 0,
+        "item": "bmwm3gtr46"
+      },
+      {
+        "label": "Kawasaki Ninja",
+        "f": "cityrp_giveitem",
+        "i": "kawasakininja",
+        "p": 0.05,
+        "cash": 0,
+        "item": "kawasakininja"
+      },
+      {
+        "label": "BMW i8",
+        "f": "cityrp_giveitem",
+        "i": "veh_bmwi8",
+        "p": 0.05,
+        "cash": 0,
+        "item": "veh_bmwi8"
+      },
+      {
+        "label": "Police Uniform",
+        "f": "cityrp_giveitem",
+        "i": "uniform_police",
+        "p": 0.05,
+        "cash": 0,
+        "item": "uniform_police"
+      },
+      {
+        "label": "Magical Cake",
+        "f": "cityrp_giveitem",
+        "i": "newfood_magical_cake",
+        "p": 0.05,
+        "cash": 0,
+        "item": "newfood_magical_cake"
+      },
+      {
+        "label": "Magical Cake",
+        "f": "cityrp_giveitem",
+        "i": "newfood_magical_cake",
+        "p": 0.05,
+        "cash": 0,
+        "item": "newfood_magical_cake"
+      },
+      {
+        "label": "Gold Rolex",
+        "f": "cityrp_giveitem",
+        "i": "rolex0",
+        "p": 0.05,
+        "cash": 0,
+        "item": "rolex0"
+      }
+    ]
+  },
+  "machines": {
+    "advanced_high": {
+      "meta": {
+        "id": "advanced_high",
+        "name": "Wheel Slots \u2014 High",
+        "entity": "pcasino_wheel_slot_machine",
+        "tier": "advanced",
+        "volatility_target": "medium",
+        "bet": 25000
+      },
+      "exact": {
+        "type": "wheel_slot",
+        "bet": 25000.0,
+        "rtp": 0.9199958180565639,
+        "cash_line_rtp": 0.856268369622158,
+        "bonus_cash_rtp": 0.06372744843440593,
+        "hit_rate": 0.30439179973309693,
+        "bonus_rate": 0.09713499968575588,
+        "p_free_spin_per_spin": 0.008094583307146323,
+        "mini_wheel": {
+          "cash_ev": 16401.7729553128,
+          "p_free_spin": 0.08333333333333333,
+          "p_jackpot": 0.08333333333333333,
+          "p_nothing": 0.08333333333333333,
+          "p_money": 0.75,
+          "p_item": 0.0,
+          "free_spin_count": 1
+        },
+        "avg_jackpot": 117654.55324153136,
+        "stdev": 3.4410712955426943,
+        "volatility_cv": 3.740311888386353,
+        "volatility_label": "medium",
+        "paylines": [
+          {
+            "pattern": "gold-gold-anything",
+            "p": 0.3361,
+            "jackpot": false,
+            "probability": 0.04906155682880699,
+            "payout": "1.34x stake"
+          },
+          {
+            "pattern": "anything-gold-gold",
+            "p": 0.3361,
+            "jackpot": false,
+            "probability": 0.04906155682880699,
+            "payout": "1.34x stake"
+          },
+          {
+            "pattern": "emerald-emerald-anything",
+            "p": 0.5041,
+            "jackpot": false,
+            "probability": 0.024318696756642083,
+            "payout": "1.50x stake"
+          },
+          {
+            "pattern": "anything-emerald-emerald",
+            "p": 0.5041,
+            "jackpot": false,
+            "probability": 0.024318696756642083,
+            "payout": "1.50x stake"
+          },
+          {
+            "pattern": "gold-gold-gold",
+            "p": 2.404,
+            "jackpot": false,
+            "probability": 0.01696653262091308,
+            "payout": "3.40x stake"
+          },
+          {
+            "pattern": "emerald-emerald-emerald",
+            "p": 6.01,
+            "jackpot": false,
+            "probability": 0.005027120776566838,
+            "payout": "7.01x stake"
+          },
+          {
+            "pattern": "bag-bag-bag",
+            "p": 12.02,
+            "jackpot": false,
+            "probability": 0.0033677781764891125,
+            "payout": "13.02x stake"
+          },
+          {
+            "pattern": "bar-bar-bar",
+            "p": 24.04,
+            "jackpot": false,
+            "probability": 0.002120816577614135,
+            "payout": "25.04x stake"
+          },
+          {
+            "pattern": "coin-coin-coin",
+            "p": 40.0,
+            "jackpot": false,
+            "probability": 0.002120816577614135,
+            "payout": "41.00x stake"
+          },
+          {
+            "pattern": "coin-coin-anything",
+            "p": 9.015,
+            "jackpot": false,
+            "probability": 0.014386205784815882,
+            "payout": "10.02x stake"
+          },
+          {
+            "pattern": "anything-coin-coin",
+            "p": 9.015,
+            "jackpot": false,
+            "probability": 0.014386205784815882,
+            "payout": "10.02x stake"
+          },
+          {
+            "pattern": "vault-vault-vault",
+            "p": 40.0,
+            "jackpot": false,
+            "probability": 0.002120816577614135,
+            "payout": "41.00x stake"
+          },
+          {
+            "pattern": "chest-anything-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.029727760889084805,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-chest-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.035077422520163784,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-anything-chest",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.03232981627650728,
+            "payout": "mini-wheel"
+          }
+        ]
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.9256064598,
+        "net_house": 371967701.0,
+        "free_spins_awarded": 1566,
+        "mystery_spins_resolved": 1718,
+        "items_won": {
+          "rolex0": 88,
+          "newfood_magical_cake": 171,
+          "veh_bmwi8": 85,
+          "kawasakininja": 95,
+          "uniform_police": 84,
+          "vape_golden": 96,
+          "bmwm3gtr46": 81,
+          "vape_dragonsbreath": 100,
+          "Trabbi": 92
+        },
+        "final_jackpot": 157000.0
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 12500000.0,
+        "mean": 1014321.5546666667,
+        "mean_pct_turnover": 0.08114572437333334,
+        "expected_mean": 1000052.2742929503,
+        "worst_1pct": -4118132.5,
+        "p05": -2304865.0,
+        "median": 1116552.5,
+        "p95": 4109796.5,
+        "worst": -6108515.0,
+        "best": 6453520.0,
+        "p_house_down": 0.29633333333333334
+      }
+    },
+    "advanced_low": {
+      "meta": {
+        "id": "advanced_low",
+        "name": "Wheel Slots \u2014 Low",
+        "entity": "pcasino_wheel_slot_machine",
+        "tier": "advanced",
+        "volatility_target": "medium",
+        "bet": 5000
+      },
+      "exact": {
+        "type": "wheel_slot",
+        "bet": 5000.0,
+        "rtp": 0.9199852109405153,
+        "cash_line_rtp": 0.8699632651306076,
+        "bonus_cash_rtp": 0.05002194580990775,
+        "hit_rate": 0.29357657999413395,
+        "bonus_rate": 0.01932411273510959,
+        "p_free_spin_per_spin": 0.001610342727925799,
+        "mini_wheel": {
+          "cash_ev": 12942.882939981997,
+          "p_free_spin": 0.08333333333333333,
+          "p_jackpot": 0.08333333333333333,
+          "p_nothing": 0.08333333333333333,
+          "p_money": 0.75,
+          "p_item": 0.0,
+          "free_spin_count": 1
+        },
+        "avg_jackpot": 98147.87305756174,
+        "stdev": 2.59943845874716,
+        "volatility_cv": 2.8255220060436765,
+        "volatility_label": "medium",
+        "paylines": [
+          {
+            "pattern": "gold-gold-anything",
+            "p": 0.6502,
+            "jackpot": false,
+            "probability": 0.06638789846572657,
+            "payout": "1.65x stake"
+          },
+          {
+            "pattern": "anything-gold-gold",
+            "p": 0.6502,
+            "jackpot": false,
+            "probability": 0.06638789846572657,
+            "payout": "1.65x stake"
+          },
+          {
+            "pattern": "emerald-emerald-anything",
+            "p": 0.9753,
+            "jackpot": false,
+            "probability": 0.0339293807251123,
+            "payout": "1.98x stake"
+          },
+          {
+            "pattern": "anything-emerald-emerald",
+            "p": 0.9753,
+            "jackpot": false,
+            "probability": 0.0339293807251123,
+            "payout": "1.98x stake"
+          },
+          {
+            "pattern": "gold-gold-gold",
+            "p": 1.868,
+            "jackpot": false,
+            "probability": 0.02985962449732829,
+            "payout": "2.87x stake"
+          },
+          {
+            "pattern": "emerald-emerald-emerald",
+            "p": 4.67,
+            "jackpot": false,
+            "probability": 0.00884729614735653,
+            "payout": "5.67x stake"
+          },
+          {
+            "pattern": "bag-bag-bag",
+            "p": 9.34,
+            "jackpot": false,
+            "probability": 0.0037324530621660364,
+            "payout": "10.34x stake"
+          },
+          {
+            "pattern": "bar-bar-bar",
+            "p": 18.68,
+            "jackpot": false,
+            "probability": 0.0019110159678290106,
+            "payout": "19.68x stake"
+          },
+          {
+            "pattern": "coin-coin-coin",
+            "p": 37.36,
+            "jackpot": false,
+            "probability": 0.0019110159678290106,
+            "payout": "38.36x stake"
+          },
+          {
+            "pattern": "coin-coin-anything",
+            "p": 7.005,
+            "jackpot": false,
+            "probability": 0.013488587706259766,
+            "payout": "8.00x stake"
+          },
+          {
+            "pattern": "anything-coin-coin",
+            "p": 7.005,
+            "jackpot": false,
+            "probability": 0.013488587706259766,
+            "payout": "8.00x stake"
+          },
+          {
+            "pattern": "vault-vault-vault",
+            "p": 40.0,
+            "jackpot": false,
+            "probability": 0.00037932782231791124,
+            "payout": "41.00x stake"
+          },
+          {
+            "pattern": "chest-anything-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.006016603745009806,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-chest-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.007186481714574758,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-anything-chest",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.006121027275525036,
+            "payout": "mini-wheel"
+          }
+        ]
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.919297273,
+        "net_house": 80702727.0,
+        "free_spins_awarded": 303,
+        "mystery_spins_resolved": 332,
+        "items_won": {
+          "vape_golden": 16,
+          "vape_dragonsbreath": 13,
+          "kawasakininja": 20,
+          "rolex0": 19,
+          "newfood_magical_cake": 32,
+          "uniform_police": 17,
+          "Trabbi": 12,
+          "veh_bmwi8": 12,
+          "bmwm3gtr46": 10
+        },
+        "final_jackpot": 11450.0
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 2500000.0,
+        "mean": 203268.98333333337,
+        "mean_pct_turnover": 0.08130759333333334,
+        "expected_mean": 200036.97264871027,
+        "worst_1pct": -749133.9999999999,
+        "p05": -392591.5,
+        "median": 230984.50000000012,
+        "p95": 691400.0,
+        "worst": -1181554.0,
+        "best": 1083718.0,
+        "p_house_down": 0.24433333333333335
+      }
+    },
+    "advanced_mid": {
+      "meta": {
+        "id": "advanced_mid",
+        "name": "Wheel Slots \u2014 Mid",
+        "entity": "pcasino_wheel_slot_machine",
+        "tier": "advanced",
+        "volatility_target": "medium",
+        "bet": 10000
+      },
+      "exact": {
+        "type": "wheel_slot",
+        "bet": 10000.0,
+        "rtp": 0.9199941787522328,
+        "cash_line_rtp": 0.865973142565087,
+        "bonus_cash_rtp": 0.05402103618714584,
+        "hit_rate": 0.2917581261350968,
+        "bonus_rate": 0.03966773585359265,
+        "p_free_spin_per_spin": 0.003305644654466054,
+        "mini_wheel": {
+          "cash_ev": 13618.381544772043,
+          "p_free_spin": 0.08333333333333333,
+          "p_jackpot": 0.08333333333333333,
+          "p_nothing": 0.08333333333333333,
+          "p_money": 0.75,
+          "p_item": 0.0,
+          "free_spin_count": 1
+        },
+        "avg_jackpot": 100753.85631504231,
+        "stdev": 3.0011308007564956,
+        "volatility_cv": 3.2621193373493527,
+        "volatility_label": "medium",
+        "paylines": [
+          {
+            "pattern": "gold-gold-anything",
+            "p": 0.4312,
+            "jackpot": false,
+            "probability": 0.06188254397966687,
+            "payout": "1.43x stake"
+          },
+          {
+            "pattern": "anything-gold-gold",
+            "p": 0.4312,
+            "jackpot": false,
+            "probability": 0.06188254397966687,
+            "payout": "1.43x stake"
+          },
+          {
+            "pattern": "emerald-emerald-anything",
+            "p": 0.6468,
+            "jackpot": false,
+            "probability": 0.02942540072256657,
+            "payout": "1.65x stake"
+          },
+          {
+            "pattern": "anything-emerald-emerald",
+            "p": 0.6468,
+            "jackpot": false,
+            "probability": 0.02942540072256657,
+            "payout": "1.65x stake"
+          },
+          {
+            "pattern": "gold-gold-gold",
+            "p": 2.18,
+            "jackpot": false,
+            "probability": 0.02609504866612458,
+            "payout": "3.18x stake"
+          },
+          {
+            "pattern": "emerald-emerald-emerald",
+            "p": 5.45,
+            "jackpot": false,
+            "probability": 0.006932686034112543,
+            "payout": "6.45x stake"
+          },
+          {
+            "pattern": "bag-bag-bag",
+            "p": 10.9,
+            "jackpot": false,
+            "probability": 0.0032618810832655723,
+            "payout": "11.90x stake"
+          },
+          {
+            "pattern": "bar-bar-bar",
+            "p": 21.8,
+            "jackpot": false,
+            "probability": 0.0020541291952926055,
+            "payout": "22.80x stake"
+          },
+          {
+            "pattern": "coin-coin-coin",
+            "p": 40.0,
+            "jackpot": false,
+            "probability": 0.0020541291952926055,
+            "payout": "41.00x stake"
+          },
+          {
+            "pattern": "coin-coin-anything",
+            "p": 8.175,
+            "jackpot": false,
+            "probability": 0.014105020474342556,
+            "payout": "9.18x stake"
+          },
+          {
+            "pattern": "anything-coin-coin",
+            "p": 8.175,
+            "jackpot": false,
+            "probability": 0.014105020474342556,
+            "payout": "9.18x stake"
+          },
+          {
+            "pattern": "vault-vault-vault",
+            "p": 40.0,
+            "jackpot": false,
+            "probability": 0.0008665857542640679,
+            "payout": "41.00x stake"
+          },
+          {
+            "pattern": "chest-anything-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.012310272639242566,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-chest-anything",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.014610564492961784,
+            "payout": "mini-wheel"
+          },
+          {
+            "pattern": "anything-anything-chest",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.012746898721388258,
+            "payout": "mini-wheel"
+          }
+        ]
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.9238516785,
+        "net_house": 152296643.0,
+        "free_spins_awarded": 642,
+        "mystery_spins_resolved": 706,
+        "items_won": {
+          "kawasakininja": 32,
+          "newfood_magical_cake": 81,
+          "vape_dragonsbreath": 39,
+          "vape_golden": 33,
+          "uniform_police": 38,
+          "bmwm3gtr46": 34,
+          "veh_bmwi8": 34,
+          "rolex0": 34,
+          "Trabbi": 28
+        },
+        "final_jackpot": 61600.0
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 5000000.0,
+        "mean": 395044.686,
+        "mean_pct_turnover": 0.0790089372,
+        "expected_mean": 400029.10623883456,
+        "worst_1pct": -1514358.0,
+        "p05": -865724.0,
+        "median": 449392.0,
+        "p95": 1472156.0,
+        "worst": -3722394.0,
+        "best": 2304124.0,
+        "p_house_down": 0.278
+      }
+    },
+    "basic_high": {
+      "meta": {
+        "id": "basic_high",
+        "name": "Classic Slots \u2014 High",
+        "entity": "pcasino_slot_machine",
+        "tier": "basic",
+        "volatility_target": "low-medium",
+        "bet": 2500
+      },
+      "exact": {
+        "type": "basic_slot",
+        "bet": 2500.0,
+        "rtp": 0.9500005637796574,
+        "cash_rtp": 0.8831418532172431,
+        "jackpot_rtp": 0.06685871056241427,
+        "hit_rate": 0.1588886983691511,
+        "jackpot_hit_rate": 0.0013717421124828531,
+        "stdev": 5.097010192311814,
+        "volatility_cv": 5.365270702611932,
+        "volatility_label": "low-medium",
+        "paylines": [
+          {
+            "pattern": "bell-bell-anything",
+            "p": 0.4887,
+            "jackpot": false,
+            "probability": 0.03840877914951989,
+            "payout": "1.49x stake",
+            "rtp_contribution": 0.05717914951989026
+          },
+          {
+            "pattern": "anything-bell-bell",
+            "p": 0.4887,
+            "jackpot": false,
+            "probability": 0.03840877914951989,
+            "payout": "1.49x stake",
+            "rtp_contribution": 0.05717914951989026
+          },
+          {
+            "pattern": "melon-melon-anything",
+            "p": 0.7819,
+            "jackpot": false,
+            "probability": 0.023148148148148147,
+            "payout": "1.78x stake",
+            "rtp_contribution": 0.041247685185185186
+          },
+          {
+            "pattern": "anything-melon-melon",
+            "p": 0.7819,
+            "jackpot": false,
+            "probability": 0.023148148148148147,
+            "payout": "1.78x stake",
+            "rtp_contribution": 0.041247685185185186
+          },
+          {
+            "pattern": "bell-bell-bell",
+            "p": 2.4437,
+            "jackpot": false,
+            "probability": 0.010973936899862825,
+            "payout": "3.44x stake",
+            "rtp_contribution": 0.03779094650205761
+          },
+          {
+            "pattern": "melon-melon-melon",
+            "p": 5.8647,
+            "jackpot": false,
+            "probability": 0.004629629629629629,
+            "payout": "6.86x stake",
+            "rtp_contribution": 0.031781018518518514
+          },
+          {
+            "pattern": "cherry-cherry-cherry",
+            "p": 14.6619,
+            "jackpot": false,
+            "probability": 0.002679183813443073,
+            "payout": "15.66x stake",
+            "rtp_contribution": 0.04196110896776406
+          },
+          {
+            "pattern": "seven-seven-seven",
+            "p": 48.8731,
+            "jackpot": false,
+            "probability": 0.0017440494335213127,
+            "payout": "49.87x stake",
+            "rtp_contribution": 0.08698115180295178
+          },
+          {
+            "pattern": "clover-clover-clover",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.0007938322410201697,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.04842376670223035
+          },
+          {
+            "pattern": "diamond-diamond-diamond",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.0005787037037037037,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.03530092592592592
+          },
+          {
+            "pattern": "diamond-diamond-anything",
+            "p": 29.3239,
+            "jackpot": false,
+            "probability": 0.0063657407407407395,
+            "payout": "30.32x stake",
+            "rtp_contribution": 0.1930340856481481
+          },
+          {
+            "pattern": "anything-diamond-diamond",
+            "p": 29.3239,
+            "jackpot": false,
+            "probability": 0.0063657407407407395,
+            "payout": "30.32x stake",
+            "rtp_contribution": 0.1930340856481481
+          },
+          {
+            "pattern": "berry-berry-berry",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.0002722844586699182,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.01660935197886501
+          },
+          {
+            "pattern": "dollar-dollar-dollar",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.0013717421124828531,
+            "payout": "jackpot",
+            "rtp_contribution": null
+          }
+        ],
+        "avg_jackpot_at_hit": 121850.0
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.9401360015,
+        "hit_rate": 0.158315,
+        "jackpot_hits": 281,
+        "final_jackpot": 196550.0,
+        "net_house": 29931999.25
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 1250000.0,
+        "mean": 63055.94983333333,
+        "mean_pct_turnover": 0.05044475986666667,
+        "expected_mean": 62499.29527542628,
+        "worst_1pct": -802971.25,
+        "p05": -485244.25,
+        "median": 90157.5,
+        "p95": 505710.0,
+        "worst": -1298147.25,
+        "best": 869268.25,
+        "p_house_down": 0.38233333333333336
+      }
+    },
+    "basic_low": {
+      "meta": {
+        "id": "basic_low",
+        "name": "Classic Slots \u2014 Low",
+        "entity": "pcasino_slot_machine",
+        "tier": "basic",
+        "volatility_target": "low",
+        "bet": 500
+      },
+      "exact": {
+        "type": "basic_slot",
+        "bet": 500.0,
+        "rtp": 0.9500017542898698,
+        "cash_rtp": 0.9060325930847689,
+        "jackpot_rtp": 0.043969161205100846,
+        "hit_rate": 0.27303224864095915,
+        "jackpot_hit_rate": 0.0007938322410201697,
+        "stdev": 2.941527022876271,
+        "volatility_cv": 3.0963385168431343,
+        "volatility_label": "low",
+        "paylines": [
+          {
+            "pattern": "bell-bell-anything",
+            "p": 0.9892,
+            "jackpot": false,
+            "probability": 0.06177920032515369,
+            "payout": "1.99x stake",
+            "rtp_contribution": 0.12289118528679571
+          },
+          {
+            "pattern": "anything-bell-bell",
+            "p": 0.9892,
+            "jackpot": false,
+            "probability": 0.06177920032515369,
+            "payout": "1.99x stake",
+            "rtp_contribution": 0.12289118528679571
+          },
+          {
+            "pattern": "melon-melon-anything",
+            "p": 1.4838,
+            "jackpot": false,
+            "probability": 0.03304247320022354,
+            "payout": "2.48x stake",
+            "rtp_contribution": 0.08207089493471523
+          },
+          {
+            "pattern": "anything-melon-melon",
+            "p": 1.4838,
+            "jackpot": false,
+            "probability": 0.03304247320022354,
+            "payout": "2.48x stake",
+            "rtp_contribution": 0.08207089493471523
+          },
+          {
+            "pattern": "cherry-cherry-anything",
+            "p": 2.0609,
+            "jackpot": false,
+            "probability": 0.018696336940507034,
+            "payout": "3.06x stake",
+            "rtp_contribution": 0.057227617741197986
+          },
+          {
+            "pattern": "anything-cherry-cherry",
+            "p": 2.0609,
+            "jackpot": false,
+            "probability": 0.018696336940507034,
+            "payout": "3.06x stake",
+            "rtp_contribution": 0.057227617741197986
+          },
+          {
+            "pattern": "bell-bell-bell",
+            "p": 3.2975,
+            "jackpot": false,
+            "probability": 0.02601229487374892,
+            "payout": "4.30x stake",
+            "rtp_contribution": 0.11178783721993596
+          },
+          {
+            "pattern": "melon-melon-melon",
+            "p": 6.595,
+            "jackpot": false,
+            "probability": 0.008452725702382766,
+            "payout": "7.59x stake",
+            "rtp_contribution": 0.0641984517095971
+          },
+          {
+            "pattern": "cherry-cherry-cherry",
+            "p": 12.3656,
+            "jackpot": false,
+            "probability": 0.003251536859218615,
+            "payout": "13.37x stake",
+            "rtp_contribution": 0.04345874104557232
+          },
+          {
+            "pattern": "seven-seven-seven",
+            "p": 24.7313,
+            "jackpot": false,
+            "probability": 0.0010565907127978458,
+            "payout": "25.73x stake",
+            "rtp_contribution": 0.027187452608215208
+          },
+          {
+            "pattern": "clover-clover-clover",
+            "p": 49.4624,
+            "jackpot": false,
+            "probability": 0.00040644210740232686,
+            "payout": "50.46x stake",
+            "rtp_contribution": 0.02051004420057918
+          },
+          {
+            "pattern": "diamond-diamond-diamond",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.00017146776406035664,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.010459533607681756
+          },
+          {
+            "pattern": "diamond-diamond-anything",
+            "p": 16.4874,
+            "jackpot": false,
+            "probability": 0.002914951989026063,
+            "payout": "17.49x stake",
+            "rtp_contribution": 0.05097493141289438
+          },
+          {
+            "pattern": "anything-diamond-diamond",
+            "p": 16.4874,
+            "jackpot": false,
+            "probability": 0.002914951989026063,
+            "payout": "17.49x stake",
+            "rtp_contribution": 0.05097493141289438
+          },
+          {
+            "pattern": "berry-berry-berry",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 2.143347050754458e-05,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.0013074417009602195
+          },
+          {
+            "pattern": "dollar-dollar-dollar",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.0007938322410201697,
+            "payout": "jackpot",
+            "rtp_contribution": null
+          }
+        ],
+        "avg_jackpot_at_hit": 27694.24
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.9544095615000284,
+        "hit_rate": 0.273765,
+        "jackpot_hits": 168,
+        "final_jackpot": 27040.0,
+        "net_house": 4559043.849997163
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 250000.0,
+        "mean": 11812.598283333335,
+        "mean_pct_turnover": 0.04725039313333334,
+        "expected_mean": 12499.56142753269,
+        "worst_1pct": -101021.25,
+        "p05": -54215.549999999974,
+        "median": 16483.999999999993,
+        "p95": 60506.45000000001,
+        "worst": -176527.2,
+        "best": 94119.39999999998,
+        "p_house_down": 0.31933333333333336
+      }
+    },
+    "basic_mid": {
+      "meta": {
+        "id": "basic_mid",
+        "name": "Classic Slots \u2014 Mid",
+        "entity": "pcasino_slot_machine",
+        "tier": "basic",
+        "volatility_target": "low-medium",
+        "bet": 1000
+      },
+      "exact": {
+        "type": "basic_slot",
+        "bet": 1000.0,
+        "rtp": 0.949999752006808,
+        "cash_rtp": 0.8947167984428187,
+        "jackpot_rtp": 0.05528295356398923,
+        "hit_rate": 0.23112108164405834,
+        "jackpot_hit_rate": 0.0010565907127978458,
+        "stdev": 3.9185851235863667,
+        "volatility_cv": 4.124827522647906,
+        "volatility_label": "low-medium",
+        "paylines": [
+          {
+            "pattern": "bell-bell-anything",
+            "p": 0.7849,
+            "jackpot": false,
+            "probability": 0.04978915815678504,
+            "payout": "1.78x stake",
+            "rtp_contribution": 0.08886866839404561
+          },
+          {
+            "pattern": "anything-bell-bell",
+            "p": 0.7849,
+            "jackpot": false,
+            "probability": 0.04978915815678504,
+            "payout": "1.78x stake",
+            "rtp_contribution": 0.08886866839404561
+          },
+          {
+            "pattern": "melon-melon-anything",
+            "p": 1.1771,
+            "jackpot": false,
+            "probability": 0.027942894883909972,
+            "payout": "2.18x stake",
+            "rtp_contribution": 0.060834476451760405
+          },
+          {
+            "pattern": "anything-melon-melon",
+            "p": 1.1771,
+            "jackpot": false,
+            "probability": 0.027942894883909972,
+            "payout": "2.18x stake",
+            "rtp_contribution": 0.060834476451760405
+          },
+          {
+            "pattern": "cherry-cherry-anything",
+            "p": 1.962,
+            "jackpot": false,
+            "probability": 0.018696336940507038,
+            "payout": "2.96x stake",
+            "rtp_contribution": 0.055378550017781844
+          },
+          {
+            "pattern": "anything-cherry-cherry",
+            "p": 1.962,
+            "jackpot": false,
+            "probability": 0.018696336940507038,
+            "payout": "2.96x stake",
+            "rtp_contribution": 0.055378550017781844
+          },
+          {
+            "pattern": "bell-bell-bell",
+            "p": 2.943,
+            "jackpot": false,
+            "probability": 0.017426205354874765,
+            "payout": "3.94x stake",
+            "rtp_contribution": 0.0687115277142712
+          },
+          {
+            "pattern": "melon-melon-melon",
+            "p": 6.8671,
+            "jackpot": false,
+            "probability": 0.006350657928161358,
+            "payout": "7.87x stake",
+            "rtp_contribution": 0.049961260986638216
+          },
+          {
+            "pattern": "cherry-cherry-cherry",
+            "p": 14.7153,
+            "jackpot": false,
+            "probability": 0.003251536859218615,
+            "payout": "15.72x stake",
+            "rtp_contribution": 0.0510988772036783
+          },
+          {
+            "pattern": "seven-seven-seven",
+            "p": 39.2407,
+            "jackpot": false,
+            "probability": 0.0013717421124828531,
+            "payout": "40.24x stake",
+            "rtp_contribution": 0.055199862825788745
+          },
+          {
+            "pattern": "clover-clover-clover",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.0005787037037037037,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.03530092592592592
+          },
+          {
+            "pattern": "diamond-diamond-diamond",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 0.0002722844586699182,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.01660935197886501
+          },
+          {
+            "pattern": "diamond-diamond-anything",
+            "p": 24.5254,
+            "jackpot": false,
+            "probability": 0.00392867576080882,
+            "payout": "25.53x stake",
+            "rtp_contribution": 0.10028102026494946
+          },
+          {
+            "pattern": "anything-diamond-diamond",
+            "p": 24.5254,
+            "jackpot": false,
+            "probability": 0.00392867576080882,
+            "payout": "25.53x stake",
+            "rtp_contribution": 0.10028102026494946
+          },
+          {
+            "pattern": "berry-berry-berry",
+            "p": 60.0,
+            "jackpot": false,
+            "probability": 9.922903012752121e-05,
+            "payout": "61.00x stake",
+            "rtp_contribution": 0.006052970837778794
+          },
+          {
+            "pattern": "dollar-dollar-dollar",
+            "p": 0,
+            "jackpot": true,
+            "probability": 0.0010565907127978458,
+            "payout": "jackpot",
+            "rtp_contribution": null
+          }
+        ],
+        "avg_jackpot_at_hit": 52322.01352366642
+      },
+      "monte_carlo": {
+        "spins": 200000,
+        "rtp": 0.9648875305001603,
+        "hit_rate": 0.2314,
+        "jackpot_hits": 213,
+        "final_jackpot": 66350.0,
+        "net_house": 7022493.899967939
+      },
+      "session": {
+        "spins": 500,
+        "trials": 3000,
+        "turnover": 500000.0,
+        "mean": 24385.40716666666,
+        "mean_pct_turnover": 0.04877081433333332,
+        "expected_mean": 25000.12399659524,
+        "worst_1pct": -250626.30000000008,
+        "p05": -135937.7,
+        "median": 34366.30000000005,
+        "p95": 160145.30000000002,
+        "worst": -404769.19999999995,
+        "best": 244328.4,
+        "p_house_down": 0.3606666666666667
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "advanced_high",
+      "rtp": 0.9199958180565639,
+      "target": 0.92,
+      "ok": true,
+      "volatility": "medium",
+      "volatility_target": "medium",
+      "mc_rtp": 0.9256064598
+    },
+    {
+      "id": "advanced_low",
+      "rtp": 0.9199852109405153,
+      "target": 0.92,
+      "ok": true,
+      "volatility": "medium",
+      "volatility_target": "medium",
+      "mc_rtp": 0.919297273
+    },
+    {
+      "id": "advanced_mid",
+      "rtp": 0.9199941787522328,
+      "target": 0.92,
+      "ok": true,
+      "volatility": "medium",
+      "volatility_target": "medium",
+      "mc_rtp": 0.9238516785
+    },
+    {
+      "id": "basic_high",
+      "rtp": 0.9500005637796574,
+      "target": 0.95,
+      "ok": true,
+      "volatility": "low-medium",
+      "volatility_target": "low-medium",
+      "mc_rtp": 0.9401360015
+    },
+    {
+      "id": "basic_low",
+      "rtp": 0.9500017542898698,
+      "target": 0.95,
+      "ok": true,
+      "volatility": "low",
+      "volatility_target": "low",
+      "mc_rtp": 0.9544095615000284
+    },
+    {
+      "id": "basic_mid",
+      "rtp": 0.949999752006808,
+      "target": 0.95,
+      "ok": true,
+      "volatility": "low-medium",
+      "volatility_target": "low-medium",
+      "mc_rtp": 0.9648875305001603
+    }
+  ],
+  "economy": {
+    "hours": 4.0,
+    "approx_spins": 1920,
+    "house_profit": 1867871.45,
+    "by_machine": {
+      "basic_low": 312.04999999987194,
+      "basic_mid": 193847.90000000008,
+      "basic_high": 221350.0,
+      "advanced_low": 175518.0,
+      "advanced_mid": 415776.0,
+      "advanced_high": 861067.5
+    },
+    "items_won": {}
+  }
+}

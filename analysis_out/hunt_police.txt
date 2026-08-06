@@ -1,0 +1,22 @@
+=== Item hunt: uniform_police ===
+Path: reel chest → mini-wheel Big Wheel segment → Mystery Wheel (with Spin Again)
+
+advanced_low  (Wheel Slots — Low)
+  Bet $5,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0089%  (1 in 11,178)
+  Exact E[spins]=11,177.7  E[wagered]=$55,888,724  E[cash back]=$51,416,799  E[net]=$-4,471,924
+  Exact median spins≈7,748  median wagered≈$38,739,111
+
+advanced_mid  (Wheel Slots — Mid)
+  Bet $10,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0184%  (1 in 5,445)
+  Exact E[spins]=5,445.2  E[wagered]=$54,452,314  E[cash back]=$50,095,812  E[net]=$-4,356,502
+  Exact median spins≈3,774  median wagered≈$37,743,468
+
+advanced_high  (Wheel Slots — High)
+  Bet $25,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0450%  (1 in 2,224)
+  Exact E[spins]=2,223.7  E[wagered]=$55,592,732  E[cash back]=$51,145,081  E[net]=$-4,447,651
+  Exact median spins≈1,541  median wagered≈$38,533,945
+
+Cross-machine check (single-segment items should be ~equal expected cash cost):
+  E[wagered] range $54,452,314 … $55,888,724  (spread 1,436,410)
+  E[net cash] range $-4,471,924 … $-4,356,502
+  Per-spin odds still scale with bet — cheaper machines are slower hunts, not cheaper ones.
