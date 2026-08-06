@@ -1,0 +1,22 @@
+=== Item hunt: newfood_magical_cake ===
+Path: reel chest → mini-wheel Big Wheel segment → Mystery Wheel (with Spin Again)
+
+advanced_low  (Wheel Slots — Low)
+  Bet $5,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0179%  (1 in 5,589)
+  Exact E[spins]=5,588.9  E[wagered]=$27,944,362  E[cash back]=$25,708,400  E[net]=$-2,235,962
+  Exact median spins≈3,874  median wagered≈$19,369,556
+
+advanced_mid  (Wheel Slots — Mid)
+  Bet $10,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0367%  (1 in 2,723)
+  Exact E[spins]=2,722.6  E[wagered]=$27,226,157  E[cash back]=$25,047,906  E[net]=$-2,178,251
+  Exact median spins≈1,887  median wagered≈$18,871,734
+
+advanced_high  (Wheel Slots — High)
+  Bet $25,000  |  Big Wheel mini-segs 1/12  |  P(item/spin)=0.0899%  (1 in 1,112)
+  Exact E[spins]=1,111.9  E[wagered]=$27,796,366  E[cash back]=$25,572,540  E[net]=$-2,223,826
+  Exact median spins≈771  median wagered≈$19,266,973
+
+Cross-machine check (single-segment items should be ~equal expected cash cost):
+  E[wagered] range $27,226,157 … $27,944,362  (spread 718,205)
+  E[net cash] range $-2,235,962 … $-2,178,251
+  Per-spin odds still scale with bet — cheaper machines are slower hunts, not cheaper ones.
