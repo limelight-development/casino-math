@@ -31,7 +31,7 @@ python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine adv
    The cap clamps the **reel line only**. The jackpot pot and the Mystery Wheel's $500,000 segment are paid by separate code paths and are *not* bounded by it — on Adv Low that segment alone is 100× stake, 2.4× the capped line.
 4. **Cheaper machines are slower**, not cheaper. Chest weights are tuned per machine (7 / 14 / 34 on Low / Mid / High) so that expected cash wagered per single-segment Mystery item is equal on all three — see below.
 5. **Losing is part of the design.** The mini-wheel keeps one `Nothing` segment, the Mystery Wheel keeps one `Nothing` plus the `$1` and Trabant joke prizes. A bonus that always pays is not exciting — there has to be a real chance of walking away with nothing.
-6. **Basic-slot jackpots reset often enough to stay a prize, not a lottery.** All three fire roughly 1 spin in 2,200, holding the pot near 100–140× stake instead of the 942–5005× it reached when the pot ran for tens of thousands of spins.
+6. **Basic-slot jackpots reset often enough to stay a prize, not a lottery.** They fire roughly 1 spin in 1,260 / 946 / 729 on Low / Mid / High, holding the pot near 50× stake instead of the 942–5005× it reached when the pot ran for tens of thousands of spins. The pot is a running counter — `startValue + bet × betAdd × spins_since_last_hit` — so its size is set by how often it resets, and it is paid outside the line cap.
 
 **Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$55.9M / $54.5M / $55.6M** on Low / Mid / High (a 1.03× spread), for an expected net cash cost of ≈ **$4.4M** per item on any of them.
 
