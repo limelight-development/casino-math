@@ -3,10 +3,10 @@
   "name": "Classic Slots \u2014 High",
   "entity": "pcasino_slot_machine",
   "tier": "basic",
-  "volatility_target": "medium-high",
+  "volatility_target": "medium",
   "bet": 2500,
   "target_rtp": 0.95,
-  "notes": "Fewer pairs, larger tops; jackpot reset 2,197 spins apart to keep the pot near 137x stake instead of a lottery.",
+  "notes": "Fewer pairs, larger tops; lines capped at 60x stake; jackpot resets ~every 2,197 spins, holding the pot near 137x stake.",
   "settings": {
     "bet": {
       "default": 2500
@@ -33,7 +33,7 @@
           "bell",
           "anything"
         ],
-        "p": 0.3043,
+        "p": 0.4366,
         "j": false
       },
       {
@@ -42,7 +42,7 @@
           "bell",
           "bell"
         ],
-        "p": 0.3043,
+        "p": 0.4366,
         "j": false
       },
       {
@@ -51,7 +51,7 @@
           "melon",
           "anything"
         ],
-        "p": 0.4868,
+        "p": 0.6985,
         "j": false
       },
       {
@@ -60,7 +60,7 @@
           "melon",
           "melon"
         ],
-        "p": 0.4868,
+        "p": 0.6985,
         "j": false
       },
       {
@@ -69,7 +69,7 @@
           "bell",
           "bell"
         ],
-        "p": 1.5214,
+        "p": 2.183,
         "j": false
       },
       {
@@ -78,7 +78,7 @@
           "melon",
           "melon"
         ],
-        "p": 3.6512,
+        "p": 5.239,
         "j": false
       },
       {
@@ -87,7 +87,7 @@
           "cherry",
           "cherry"
         ],
-        "p": 9.1281,
+        "p": 13.0975,
         "j": false
       },
       {
@@ -96,7 +96,7 @@
           "seven",
           "seven"
         ],
-        "p": 30.427,
+        "p": 43.6585,
         "j": false
       },
       {
@@ -105,7 +105,7 @@
           "clover",
           "clover"
         ],
-        "p": 73.0248,
+        "p": 60.0,
         "j": false
       },
       {
@@ -114,7 +114,7 @@
           "diamond",
           "diamond"
         ],
-        "p": 182.562,
+        "p": 60.0,
         "j": false
       },
       {
@@ -123,7 +123,7 @@
           "diamond",
           "anything"
         ],
-        "p": 18.2562,
+        "p": 26.1951,
         "j": false
       },
       {
@@ -132,7 +132,7 @@
           "diamond",
           "diamond"
         ],
-        "p": 18.2562,
+        "p": 26.1951,
         "j": false
       },
       {
@@ -141,7 +141,7 @@
           "berry",
           "berry"
         ],
-        "p": 365.1241,
+        "p": 60.0,
         "j": false
       },
       {
@@ -159,105 +159,105 @@
     }
   },
   "math": {
-    "rtp": 0.949989,
+    "rtp": 0.95,
     "hit_rate": 0.169878,
     "jackpot_hit_rate": 0.00045517,
-    "volatility_label": "medium-high",
-    "volatility_cv": 9.594,
+    "volatility_label": "medium",
+    "volatility_cv": 5.751,
     "avg_jackpot_at_hit": 342050.0,
     "jackpot_rtp": 0.062276,
-    "cash_rtp": 0.887713,
+    "cash_rtp": 0.887724,
     "paylines": [
       {
         "pattern": "bell-bell-anything",
         "probability": 0.04096495,
-        "payout": "1.30x stake",
+        "payout": "1.44x stake",
         "jackpot": false,
-        "p": 0.3043
+        "p": 0.4366
       },
       {
         "pattern": "anything-bell-bell",
         "probability": 0.04096495,
-        "payout": "1.30x stake",
+        "payout": "1.44x stake",
         "jackpot": false,
-        "p": 0.3043
+        "p": 0.4366
       },
       {
         "pattern": "melon-melon-anything",
         "probability": 0.02477099,
-        "payout": "1.49x stake",
+        "payout": "1.70x stake",
         "jackpot": false,
-        "p": 0.4868
+        "p": 0.6985
       },
       {
         "pattern": "anything-melon-melon",
         "probability": 0.02477099,
-        "payout": "1.49x stake",
+        "payout": "1.70x stake",
         "jackpot": false,
-        "p": 0.4868
+        "p": 0.6985
       },
       {
         "pattern": "bell-bell-bell",
         "probability": 0.01228949,
-        "payout": "2.52x stake",
+        "payout": "3.18x stake",
         "jackpot": false,
-        "p": 1.5214
+        "p": 2.183
       },
       {
         "pattern": "melon-melon-melon",
         "probability": 0.00518463,
-        "payout": "4.65x stake",
+        "payout": "6.24x stake",
         "jackpot": false,
-        "p": 3.6512
+        "p": 5.239
       },
       {
         "pattern": "cherry-cherry-cherry",
         "probability": 0.00300036,
-        "payout": "10.13x stake",
+        "payout": "14.10x stake",
         "jackpot": false,
-        "p": 9.1281
+        "p": 13.0975
       },
       {
         "pattern": "seven-seven-seven",
         "probability": 0.00195312,
-        "payout": "31.43x stake",
+        "payout": "44.66x stake",
         "jackpot": false,
-        "p": 30.427
+        "p": 43.6585
       },
       {
         "pattern": "clover-clover-clover",
         "probability": 0.000889,
-        "payout": "74.02x stake",
+        "payout": "61.00x stake",
         "jackpot": false,
-        "p": 73.0248
+        "p": 60.0
       },
       {
         "pattern": "diamond-diamond-diamond",
         "probability": 0.00064808,
-        "payout": "183.56x stake",
+        "payout": "61.00x stake",
         "jackpot": false,
-        "p": 182.562
+        "p": 60.0
       },
       {
         "pattern": "diamond-diamond-anything",
         "probability": 0.00684083,
-        "payout": "19.26x stake",
+        "payout": "27.20x stake",
         "jackpot": false,
-        "p": 18.2562
+        "p": 26.1951
       },
       {
         "pattern": "anything-diamond-diamond",
         "probability": 0.00684083,
-        "payout": "19.26x stake",
+        "payout": "27.20x stake",
         "jackpot": false,
-        "p": 18.2562
+        "p": 26.1951
       },
       {
         "pattern": "berry-berry-berry",
         "probability": 0.00030493,
-        "payout": "366.12x stake",
+        "payout": "61.00x stake",
         "jackpot": false,
-        "p": 365.1241
+        "p": 60.0
       },
       {
         "pattern": "dollar-dollar-dollar",

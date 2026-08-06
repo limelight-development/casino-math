@@ -26,7 +26,9 @@ python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine adv
 
 1. **Basic slots target ~95% cash RTP; advanced machines target ~92%.** Each preset carries its own `target_rtp` and the validator checks against that, not one global number.
 2. **Mystery Wheel items are not cash.** Cars / Dragon’s Breath / Rolex / etc. are prestige. Bound prizes use hidden `tradable=false` item meta so they cannot be given, dropped, or inventory-sold (Trabbi is the exception — still tradable as the joke prize).
-3. **Line payouts are capped at 40× stake on advanced machines**, with frequent low-multiplier gold/emerald pair pays buying the RTP back at the bottom. This is a deliberate trade: a lower headline top prize in exchange for a far smaller tail. The uncapped tables could pay $3.03M from a single spin.
+3. **Line payouts are capped: 40× stake on advanced machines, 60× on basic.** Basic slots pay no items, so they keep a bigger headline prize; below ~60× the cap stops helping them anyway, because the jackpot pot becomes the binding tail. Frequent low-multiplier pays buy the RTP back at the bottom. The uncapped advanced tables could pay $3.03M from a single spin.
+
+   The cap clamps the **reel line only**. The jackpot pot and the Mystery Wheel's $500,000 segment are paid by separate code paths and are *not* bounded by it — on Adv Low that segment alone is 100× stake, 2.4× the capped line.
 4. **Cheaper machines are slower**, not cheaper. Chest weights are tuned per machine (7 / 14 / 34 on Low / Mid / High) so that expected cash wagered per single-segment Mystery item is equal on all three — see below.
 5. **Losing is part of the design.** The mini-wheel keeps one `Nothing` segment, the Mystery Wheel keeps one `Nothing` plus the `$1` and Trabant joke prizes. A bonus that always pays is not exciting — there has to be a real chance of walking away with nothing.
 6. **Basic-slot jackpots reset often enough to stay a prize, not a lottery.** All three fire roughly 1 spin in 2,200, holding the pot near 100–140× stake instead of the 942–5005× it reached when the pot ran for tens of thousands of spins.
