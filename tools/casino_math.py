@@ -23,6 +23,8 @@ import json
 import math
 import random
 import statistics
+from collections import Counter
+from itertools import accumulate
 from pathlib import Path
 from typing import Any
 
@@ -78,7 +80,7 @@ def exact_basic_slot(cfg: dict) -> dict[str, Any]:
     jackpot_hit_p = 0.0
     hit_p = 0.0
     # Second moment of (return / bet) for cash-only; jackpot modeled separately
-    returns: list[tuple[float, float]] = []  # (weight_prob, return_multiplier)
+    returns: list[tuple[float, float, bool]] = []  # (prob, line_multiplier, is_jackpot)
 
     for i, s1 in enumerate(symbols):
         for j, s2 in enumerate(symbols):
@@ -86,17 +88,20 @@ def exact_basic_slot(cfg: dict) -> dict[str, Any]:
                 p = (weights[i] * weights[j] * weights[k]) / (total_w ** 3)
                 win = pick_combo(combos, s1, s2, s3, jackpot_on)
                 if not win:
-                    returns.append((p, 0.0))
+                    returns.append((p, 0.0, False))
                     continue
                 hit_p += p
+                mult = 1.0 + float(win["p"])
+                cash_return += p * mult
                 if jackpot_on and win.get("j"):
                     jackpot_hit_p += p
-                    # Stake already paid into pot via betAdd; payout is pot EV
-                    returns.append((p, None))  # mark jackpot outcome
+                    # The Lua pays the line AND the pot on a jackpot combo
+                    # (pcasino_slot_machine/init.lua:203-217), so the stake comes
+                    # back on top of the pot. p is 0 for every jackpot combo in
+                    # the presets, making this exactly one stake returned.
+                    returns.append((p, mult, True))
                 else:
-                    mult = 1.0 + float(win["p"])
-                    cash_return += p * mult
-                    returns.append((p, mult))
+                    returns.append((p, mult, False))
 
     # Pot resets to startValue after each hit (house-seeded), then grows by bet*betAdd.
     # E[pot at hit] = start + bet*betAdd/P(hit). RTP = betAdd + P(hit)*start/bet.
@@ -111,8 +116,8 @@ def exact_basic_slot(cfg: dict) -> dict[str, Any]:
 
     mean = rtp
     var = 0.0
-    for p, mult in returns:
-        x = avg_jp_mult if mult is None else mult
+    for p, mult, is_jackpot in returns:
+        x = mult + (avg_jp_mult if is_jackpot else 0.0)
         var += p * (x - mean) ** 2
     stdev = math.sqrt(var)
     cv = stdev / mean if mean > 0 else float("inf")
@@ -500,6 +505,204 @@ def monte_carlo_wheel(
     }
 
 
+SESSION_SPINS = 1_000
+SESSION_TRIALS = 2_000
+
+
+def _mystery_terminating_cash(wheel: list[dict]) -> list[float]:
+    """
+    Cash banked by one Mystery Wheel activation, as a flat distribution.
+
+    A Spin Again segment pays no cash and re-draws, so the cash actually
+    awarded is whatever the *terminating* segment pays. Every terminating
+    segment is equally likely, which is why the mean here is
+    money_sum / (n - respins) -- the same value mystery_wheel_cash_ev solves for.
+    """
+    terminating = [s for s in wheel if s["f"] != "prize_wheel"]
+    if not terminating:
+        raise ValueError("mystery wheel cannot be all respins")
+    return [float(s["i"]) if s["f"] == "money" else 0.0 for s in terminating]
+
+
+def spin_pnl_outcomes(cfg: dict, mystery_wheel: list[dict] | None = None) -> dict[str, Any]:
+    """
+    Exact finite distribution of HOUSE profit for one paid spin.
+
+    House delta = +bet (stake taken) - everything paid back out.
+
+    The jackpot is kept as a separate outcome rather than folded in at its
+    average, because the pot depends on how many spins it has been growing.
+    Callers resolve it with draw_jackpot_pot().
+    """
+    chance = {k: int(v) for k, v in cfg["chance"].items()}
+    probs = _chance_probs(chance)
+    combos = cfg["combo"]
+    bet = float(cfg["bet"]["default"])
+    jackpot_on = bool(cfg["jackpot"]["toggle"])
+    bet_add = float(cfg["jackpot"]["betAdd"]) if jackpot_on else 0.0
+    start_jp = float(cfg["jackpot"]["startValue"])
+
+    # Exact probability of each combo (and of no win) over all reel triples.
+    by_combo: dict[int, float] = {}
+    p_nowin = 0.0
+    for a, pa in probs.items():
+        for b, pb in probs.items():
+            for c, pc in probs.items():
+                win = pick_combo(combos, a, b, c, jackpot_on)
+                if win is None:
+                    p_nowin += pa * pb * pc
+                else:
+                    by_combo[id(win)] = by_combo.get(id(win), 0.0) + pa * pb * pc
+
+    values: list[float] = [bet]          # no win: house keeps the stake
+    weights: list[float] = [p_nowin]
+    # Every machine in the presets reaches the pot from more than one combo
+    # (three chest patterns on the advanced machines), so this must be a set --
+    # tracking a single index silently drops the other awards.
+    jackpot_indices: set[int] = set()
+    p_jackpot = 0.0
+
+    def add(value: float, weight: float, is_jackpot: bool = False) -> None:
+        if weight <= 0:
+            return
+        if is_jackpot:
+            jackpot_indices.add(len(values))
+        values.append(value)
+        weights.append(weight)
+
+    is_wheel_slot = "wheel" in cfg
+
+    for combo in combos:
+        p = by_combo.get(id(combo), 0.0)
+        if p <= 0:
+            continue
+        line = bet - bet * (1 + float(combo.get("p", 0)))   # == -bet * p
+
+        if not (jackpot_on and combo.get("j")):
+            add(line, p)
+            continue
+
+        if not is_wheel_slot:
+            # Basic slot: pays the line AND the pot on a jackpot combo.
+            add(line, p, is_jackpot=True)
+            p_jackpot += p
+            continue
+
+        # Advanced machine: the chest pays no line cash, it queues the mini-wheel.
+        wheel = cfg["wheel"]
+        seg_p = p / len(wheel)
+        for seg in wheel:
+            fn = seg["f"]
+            if fn == "money":
+                add(bet - float(seg["i"]), seg_p)
+            elif fn in ("nothing", "cityrp_giveitem"):
+                add(bet, seg_p)
+            elif fn == "jackpot":
+                add(bet, seg_p, is_jackpot=True)
+                p_jackpot += seg_p
+            elif fn == "prize_wheel":
+                if mystery_wheel is None:
+                    raise ValueError("mini-wheel awards a Mystery spin; pass mystery_wheel")
+                cashes = _mystery_terminating_cash(mystery_wheel)
+                for cash in cashes:
+                    add(bet - cash, seg_p / len(cashes))
+            else:
+                raise ValueError(f"unsupported mini-wheel reward: {fn}")
+
+    jackpot_step = bet * bet_add
+    avg_pot = start_jp + (jackpot_step / p_jackpot if p_jackpot > 0 else 0.0)
+    expected = sum(
+        w * ((v - avg_pot) if i in jackpot_indices else v)
+        for i, (v, w) in enumerate(zip(values, weights))
+    )
+
+    return {
+        "values": values,
+        "weights": weights,
+        "bet": bet,
+        "jackpot_indices": jackpot_indices,
+        "p_jackpot": p_jackpot,
+        "jackpot_start": start_jp,
+        "jackpot_step": jackpot_step,
+        "avg_jackpot": avg_pot,
+        # Analytic mean house profit per spin == (1 - RTP) * bet. Callers assert
+        # against the exact RTP so a mis-wired outcome can't pass silently.
+        "expected_house_per_spin": expected,
+    }
+
+
+def draw_jackpot_pot(rng: random.Random, start: float, step: float, p_award: float) -> float:
+    """
+    Sample the pot at award time.
+
+    Each spin adds `step` before the result resolves, and an award resets the
+    pot to `start`, so a pot paid after G spins is start + step*G with
+    G ~ Geometric(p_award). Mean start + step/p_award -- the preset avg_jackpot.
+    """
+    if step <= 0 or p_award <= 0:
+        return start
+    u = 1.0 - rng.random()                       # (0, 1]
+    gap = math.ceil(math.log(u) / math.log(1.0 - p_award))
+    return start + step * max(1, gap)
+
+
+def _percentile(sorted_vals: list[float], q: float) -> float:
+    if not sorted_vals:
+        return 0.0
+    return sorted_vals[min(len(sorted_vals) - 1, int(q * (len(sorted_vals) - 1)))]
+
+
+def session_pnl(
+    cfg: dict,
+    mystery_wheel: list[dict] | None,
+    spins: int = SESSION_SPINS,
+    trials: int = SESSION_TRIALS,
+    seed: int = 99,
+) -> dict[str, Any]:
+    """
+    Distribution of house P&L over a session of `spins` paid spins.
+
+    Mean RTP says what happens over millions of spins. This says what a single
+    evening can look like -- which is what an RP economy actually experiences.
+    """
+    dist = spin_pnl_outcomes(cfg, mystery_wheel)
+    values, weights = dist["values"], dist["weights"]
+    cum = list(accumulate(weights))
+    jp_indices = dist["jackpot_indices"]
+    start, step, p_jp = dist["jackpot_start"], dist["jackpot_step"], dist["p_jackpot"]
+    rng = random.Random(seed)
+    indices = range(len(values))
+
+    results: list[float] = []
+    for _ in range(trials):
+        counts = Counter(rng.choices(indices, cum_weights=cum, k=spins))
+        total = 0.0
+        for i, n in counts.items():
+            total += values[i] * n
+            if i in jp_indices:
+                total -= sum(draw_jackpot_pot(rng, start, step, p_jp) for _ in range(n))
+        results.append(total)
+
+    results.sort()
+    turnover = spins * dist["bet"]
+    mean = statistics.mean(results)
+    return {
+        "spins": spins,
+        "trials": trials,
+        "turnover": turnover,
+        "mean": mean,
+        "mean_pct_turnover": mean / turnover if turnover else 0.0,
+        "expected_mean": dist["expected_house_per_spin"] * spins,
+        "worst_1pct": _percentile(results, 0.01),
+        "p05": _percentile(results, 0.05),
+        "median": _percentile(results, 0.50),
+        "p95": _percentile(results, 0.95),
+        "worst": results[0],
+        "best": results[-1],
+        "p_house_down": sum(1 for r in results if r < 0) / len(results),
+    }
+
+
 def economy_session_mix(presets: dict[str, dict], mystery: dict, hours: float = 4.0, seed: int = 42) -> dict:
     """
     Rough floor stress test: mix of players on each machine for `hours`.
@@ -565,7 +768,11 @@ def load_presets() -> tuple[dict[str, dict], dict]:
     return presets, mystery
 
 
-def analyze_all(mc_spins: int = 200_000) -> dict:
+def analyze_all(
+    mc_spins: int = 200_000,
+    session_spins: int = SESSION_SPINS,
+    session_trials: int = SESSION_TRIALS,
+) -> dict:
     presets, mystery = load_presets()
     bw = mystery_wheel_cash_ev(mystery["settings"]["wheel"])
     report: dict[str, Any] = {"mystery_wheel": bw, "machines": {}, "checks": []}
@@ -581,6 +788,23 @@ def analyze_all(mc_spins: int = 200_000) -> dict:
             exact = exact_wheel_slot(settings, bw["cash_ev"])
             mc = monte_carlo_wheel(settings, mystery["settings"], mc_spins)
         report["machines"][pid] = {"meta": {k: preset[k] for k in ("id", "name", "entity", "tier", "volatility_target", "bet")}, "exact": exact, "monte_carlo": mc}
+        if session_trials > 0:
+            sess = session_pnl(
+                settings,
+                mystery["settings"]["wheel"],
+                spins=session_spins,
+                trials=session_trials,
+            )
+            # The per-spin P&L distribution must reproduce the exact RTP. If it
+            # drifts, the outcome table is mis-wired and every percentile below
+            # it is wrong -- fail loudly rather than publish a plausible number.
+            want = (1 - exact["rtp"]) * exact["bet"] * session_spins
+            if abs(sess["expected_mean"] - want) > max(1.0, abs(want) * 1e-9):
+                raise SystemExit(
+                    f"{pid}: session P&L model disagrees with exact RTP "
+                    f"(${sess['expected_mean']:,.2f} vs ${want:,.2f})"
+                )
+            report["machines"][pid]["session"] = sess
 
         ok = abs(exact["rtp"] - TARGET_RTP) <= RTP_TOLERANCE
         report["checks"].append(
@@ -618,6 +842,14 @@ def print_report(report: dict) -> None:
                   f"mini free segs={ex['mini_wheel']['free_spin_count']}/12  avgJP=${ex['avg_jackpot']:,.0f}")
         else:
             print(f"    JP hit={ex['jackpot_hit_rate']*100:.4f}%  eq.avgJP@hit=${ex['avg_jackpot_at_hit']:,.0f}")
+        sess = data.get("session")
+        if sess:
+            print(f"    session P&L ({sess['spins']:,} spins = ${sess['turnover']:,.0f} wagered, "
+                  f"{sess['trials']:,} sims):")
+            print(f"      worst 1% ${sess['worst_1pct']:>+14,.0f}   p05 ${sess['p05']:>+14,.0f}   "
+                  f"median ${sess['median']:>+13,.0f}   p95 ${sess['p95']:>+13,.0f}")
+            print(f"      mean ${sess['mean']:>+14,.0f} ({sess['mean_pct_turnover']*100:.2f}% of wagered)"
+                  f"   P(house down) = {sess['p_house_down']*100:.1f}%")
     print()
     print("=== RTP Checks (±0.5pp of 95%) ===")
     all_ok = True
@@ -895,6 +1127,18 @@ examples:
 """,
     )
     parser.add_argument("--spins", type=int, default=200_000, help="Monte Carlo spins per machine (RTP check)")
+    parser.add_argument(
+        "--session-spins",
+        type=int,
+        default=SESSION_SPINS,
+        help=f"Spins per simulated session for the P&L spread (default {SESSION_SPINS:,})",
+    )
+    parser.add_argument(
+        "--session-trials",
+        type=int,
+        default=SESSION_TRIALS,
+        help=f"Sessions to simulate per machine (default {SESSION_TRIALS:,}; 0 disables)",
+    )
     parser.add_argument("--json-out", type=Path, help="Write full RTP analysis JSON")
     parser.add_argument("--emit-lua", type=Path, help="Generate sh_presets.lua from JSON")
     parser.add_argument("--quiet", action="store_true")
@@ -926,7 +1170,11 @@ examples:
         return
 
     if not args.skip_rtp or args.json_out:
-        report = analyze_all(mc_spins=args.spins)
+        report = analyze_all(
+            mc_spins=args.spins,
+            session_spins=args.session_spins,
+            session_trials=args.session_trials,
+        )
         if args.json_out:
             args.json_out.write_text(json.dumps(report, indent=2))
             print(f"Wrote {args.json_out}")
