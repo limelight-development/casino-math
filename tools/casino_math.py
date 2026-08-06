@@ -806,12 +806,15 @@ def analyze_all(
                 )
             report["machines"][pid]["session"] = sess
 
-        ok = abs(exact["rtp"] - TARGET_RTP) <= RTP_TOLERANCE
+        # Machines no longer share one RTP target -- advanced machines run
+        # leaner than basic ones -- so the gate reads the preset's own figure.
+        target = preset.get("target_rtp") or TARGET_RTP
+        ok = abs(exact["rtp"] - target) <= RTP_TOLERANCE
         report["checks"].append(
             {
                 "id": pid,
                 "rtp": exact["rtp"],
-                "target": TARGET_RTP,
+                "target": target,
                 "ok": ok,
                 "volatility": exact["volatility_label"],
                 "volatility_target": preset.get("volatility_target"),
@@ -851,13 +854,14 @@ def print_report(report: dict) -> None:
             print(f"      mean ${sess['mean']:>+14,.0f} ({sess['mean_pct_turnover']*100:.2f}% of wagered)"
                   f"   P(house down) = {sess['p_house_down']*100:.1f}%")
     print()
-    print("=== RTP Checks (±0.5pp of 95%) ===")
+    print(f"=== RTP Checks (each machine's own target ±{RTP_TOLERANCE*100:.1f}pp) ===")
     all_ok = True
     for c in report["checks"]:
         mark = "OK" if c["ok"] else "FAIL"
         if not c["ok"]:
             all_ok = False
-        print(f"  [{mark}] {c['id']}: {c['rtp']*100:.2f}%  vol={c['volatility']} (target {c['volatility_target']})")
+        print(f"  [{mark}] {c['id']}: {c['rtp']*100:.2f}% vs target {c['target']*100:.0f}%  "
+              f"vol={c['volatility']} (target {c['volatility_target']})")
     eco = report["economy"]
     print()
     print(f"=== Economy stress (~{eco['hours']}h heavy floor) ===")

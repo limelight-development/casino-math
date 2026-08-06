@@ -3,16 +3,16 @@
   "name": "Wheel Slots \u2014 High",
   "entity": "pcasino_wheel_slot_machine",
   "tier": "advanced",
-  "volatility_target": "medium-high",
+  "volatility_target": "medium",
   "bet": 25000,
-  "target_rtp": 0.95,
-  "notes": "Mini-wheel: 3/12 Big Wheel. Hunt EV equalized (~$7.5M wagered). Cash RTP includes mini cash + Mystery cash EV (now with $500k top).",
+  "target_rtp": 0.9,
+  "notes": "Mini-wheel: 1/12 Big Wheel. Lines capped at 40x with frequent gold/emerald pair pays buying the RTP back at the bottom. Target RTP 90%. Hunt EV is NO LONGER equalised across advanced machines - see README.",
   "hunt": {
     "target_expected_wager_per_single_segment_item": 7500000,
-    "expected_wager": 7517645.58,
-    "expected_net_cash": -379924.02,
-    "p_item_per_spin": 0.0033255092615975617,
-    "one_in_spins": 300.71
+    "expected_wager": 45326701.15,
+    "expected_net_cash": -4533196.58,
+    "p_item_per_spin": 0.0005515512791197594,
+    "one_in_spins": 1813.07
   },
   "settings": {
     "bet": {
@@ -21,7 +21,7 @@
     "jackpot": {
       "toggle": true,
       "startValue": 25000,
-      "betAdd": 0.07
+      "betAdd": 0.03
     },
     "chance": {
       "gold": 240,
@@ -30,9 +30,45 @@
       "bar": 120,
       "coin": 120,
       "vault": 120,
-      "chest": 93
+      "chest": 45
     },
     "combo": [
+      {
+        "c": [
+          "gold",
+          "gold",
+          "anything"
+        ],
+        "p": 0.3127,
+        "j": false
+      },
+      {
+        "c": [
+          "anything",
+          "gold",
+          "gold"
+        ],
+        "p": 0.3127,
+        "j": false
+      },
+      {
+        "c": [
+          "emerald",
+          "emerald",
+          "anything"
+        ],
+        "p": 0.469,
+        "j": false
+      },
+      {
+        "c": [
+          "anything",
+          "emerald",
+          "emerald"
+        ],
+        "p": 0.469,
+        "j": false
+      },
       {
         "c": [
           "gold",
@@ -75,7 +111,7 @@
           "coin",
           "coin"
         ],
-        "p": 48.08,
+        "p": 40.0,
         "j": false
       },
       {
@@ -102,7 +138,7 @@
           "vault",
           "vault"
         ],
-        "p": 120.2,
+        "p": 40.0,
         "j": false
       },
       {
@@ -171,16 +207,16 @@
         "p": "mystery_2"
       },
       {
-        "n": "Big Wheel",
-        "f": "prize_wheel",
+        "n": "Nothing",
+        "f": "nothing",
         "i": 0,
-        "p": "mystery_2"
+        "p": "melon"
       },
       {
-        "n": "Big Wheel",
-        "f": "prize_wheel",
+        "n": "Nothing",
+        "f": "nothing",
         "i": 0,
-        "p": "mystery_2"
+        "p": "melon"
       },
       {
         "n": "Nothing",
@@ -212,17 +248,17 @@
     }
   },
   "math": {
-    "rtp": 0.949462,
-    "hit_rate": 0.304815,
-    "bonus_rate": 0.252739,
-    "p_free_spin_per_spin": 0.06318468,
-    "volatility_label": "medium-high",
-    "volatility_cv": 6.143,
-    "avg_jackpot": 108089.77,
+    "rtp": 0.899988,
+    "hit_rate": 0.328401,
+    "bonus_rate": 0.125754,
+    "p_free_spin_per_spin": 0.01047947,
+    "volatility_label": "medium",
+    "volatility_cv": 3.763,
+    "avg_jackpot": 96568.48,
     "mini_wheel": {
-      "p_free_spin": 0.25,
-      "free_spin_count": 3,
-      "cash_ev": 23119.34,
+      "p_free_spin": 0.08333333333333333,
+      "free_spin_count": 1,
+      "cash_ev": 14001.32,
       "segments": [
         {
           "n": "$1,250",
@@ -261,14 +297,14 @@
           "p_seg": 0.083333
         },
         {
-          "n": "Big Wheel",
-          "f": "prize_wheel",
+          "n": "Nothing",
+          "f": "nothing",
           "i": 0,
           "p_seg": 0.083333
         },
         {
-          "n": "Big Wheel",
-          "f": "prize_wheel",
+          "n": "Nothing",
+          "f": "nothing",
           "i": 0,
           "p_seg": 0.083333
         },
@@ -300,78 +336,106 @@
     },
     "paylines": [
       {
+        "pattern": "gold-gold-anything",
+        "probability": 0.04811895,
+        "payout": "1.31x stake",
+        "jackpot": false,
+        "p": 0.3127
+      },
+      {
+        "pattern": "anything-gold-gold",
+        "probability": 0.04811895,
+        "payout": "1.31x stake",
+        "jackpot": false,
+        "p": 0.3127
+      },
+      {
+        "pattern": "emerald-emerald-anything",
+        "probability": 0.023813,
+        "payout": "1.47x stake",
+        "jackpot": false,
+        "p": 0.469
+      },
+      {
+        "pattern": "anything-emerald-emerald",
+        "probability": 0.023813,
+        "payout": "1.47x stake",
+        "jackpot": false,
+        "p": 0.469
+      },
+      {
         "pattern": "gold-gold-gold",
-        "probability": 0.01411842,
+        "probability": 0.01638092,
         "payout": "3.40x stake",
         "jackpot": false,
         "p": 2.404
       },
       {
         "pattern": "emerald-emerald-emerald",
-        "probability": 0.00418323,
+        "probability": 0.00485361,
         "payout": "7.01x stake",
         "jackpot": false,
         "p": 6.01
       },
       {
         "pattern": "bag-bag-bag",
-        "probability": 0.00280244,
+        "probability": 0.00325154,
         "payout": "13.02x stake",
         "jackpot": false,
         "p": 12.02
       },
       {
         "pattern": "bar-bar-bar",
-        "probability": 0.0017648,
+        "probability": 0.00204762,
         "payout": "25.04x stake",
         "jackpot": false,
         "p": 24.04
       },
       {
         "pattern": "coin-coin-coin",
-        "probability": 0.0017648,
-        "payout": "49.08x stake",
+        "probability": 0.00204762,
+        "payout": "41.00x stake",
         "jackpot": false,
-        "p": 48.08
+        "p": 40.0
       },
       {
         "pattern": "coin-coin-anything",
-        "probability": 0.01283893,
+        "probability": 0.01407735,
         "payout": "10.02x stake",
         "jackpot": false,
         "p": 9.015
       },
       {
         "pattern": "anything-coin-coin",
-        "probability": 0.01283893,
+        "probability": 0.01407735,
         "payout": "10.02x stake",
         "jackpot": false,
         "p": 9.015
       },
       {
         "pattern": "vault-vault-vault",
-        "probability": 0.0017648,
-        "payout": "121.20x stake",
+        "probability": 0.00204762,
+        "payout": "41.00x stake",
         "jackpot": false,
-        "p": 120.2
+        "p": 40.0
       },
       {
         "pattern": "chest-anything-anything",
-        "probability": 0.07556662,
+        "probability": 0.03798753,
         "payout": "mini-wheel",
         "jackpot": true,
         "p": 0
       },
       {
         "pattern": "anything-chest-anything",
-        "probability": 0.08488422,
+        "probability": 0.04535147,
         "payout": "mini-wheel",
         "jackpot": true,
         "p": 0
       },
       {
         "pattern": "anything-anything-chest",
-        "probability": 0.09228787,
+        "probability": 0.04241469,
         "payout": "mini-wheel",
         "jackpot": true,
         "p": 0
