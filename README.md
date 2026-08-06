@@ -28,8 +28,10 @@ python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine adv
 2. **Mystery Wheel items are not cash.** Cars / Dragon’s Breath / Rolex / etc. are prestige. Bound prizes use hidden `tradable=false` item meta so they cannot be given, dropped, or inventory-sold (Trabbi is the exception — still tradable as the joke prize).
 3. **Line payouts are capped at 40× stake on advanced machines**, with frequent low-multiplier gold/emerald pair pays buying the RTP back at the bottom. This is a deliberate trade: a lower headline top prize in exchange for a far smaller tail. The uncapped tables could pay $3.03M from a single spin.
 4. **Cheaper machines are slower**, not cheaper. Chest weights are tuned per machine (7 / 14 / 34 on Low / Mid / High) so that expected cash wagered per single-segment Mystery item is equal on all three — see below.
+5. **Losing is part of the design.** The mini-wheel keeps one `Nothing` segment, the Mystery Wheel keeps one `Nothing` plus the `$1` and Trabant joke prizes. A bonus that always pays is not exciting — there has to be a real chance of walking away with nothing.
+6. **Basic-slot jackpots reset often enough to stay a prize, not a lottery.** All three fire roughly 1 spin in 2,200, holding the pot near 100–140× stake instead of the 942–5005× it reached when the pot ran for tens of thousands of spins.
 
-**Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$59.0M / $57.5M / $58.7M** on Low / Mid / High (a 1.03× spread), for an expected net cash cost of ≈ **$4.7M** per item on any of them.
+**Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$55.9M / $54.5M / $55.6M** on Low / Mid / High (a 1.03× spread), for an expected net cash cost of ≈ **$4.4M** per item on any of them.
 
 All three run **1/12** Big Wheel mini-segments, so equalisation comes entirely from the chest weight: per-spin bonus rate is held proportional to the stake (1.93% / 3.97% / 9.71% against bets of $5k / $10k / $25k). The residual spread is integer granularity — one unit of chest moves Adv Mid by about 7%, so 1.03× is the closest reachable without inflating every weight on the reel.
 
@@ -116,12 +118,14 @@ Chest combos (`j=true`) do **not** pay line cash; they queue this wheel.
 | --- | --- |
 | `money` | Pay `i` dollars |
 | `jackpot` | Pay machine pot, reset to `startValue` |
-| `nothing` | No cash |
+| `nothing` | No cash (one segment, kept deliberately) |
 | `prize_wheel` | Grant one Mystery / Big Wheel free spin |
 
 **Python:** `math.random(12)` → `rng.randrange(12)`; same reward table.
 
 ### 7) Mystery / Big Wheel (20 segments, uniform, free-spin only)
+
+Two of the twenty segments are **Spin Again**, so an activation resolves against **18** absorbing segments. Published per-segment odds are quoted as `k/18` — the chance the activation *eventually* lands that segment, which is what a player experiences. Quoting `k/20` understates every real rate.
 
 **Lua:** `math.random(20)` over `data.wheel`. Our preset sets `buySpin.buy = false`.
 
@@ -139,7 +143,7 @@ Probability a free spin **eventually** awards a specific item with `k` matching 
 P(item | free spin) = k / (20 - r)
 ```
 
-(With one M3 segment and one Spin Again: `1/19`.)
+(With one M3 segment and two Spin Again segments: `1/18`.)
 
 ### 8) End-to-end item hunt probability
 

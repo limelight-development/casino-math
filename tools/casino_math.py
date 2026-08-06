@@ -262,12 +262,19 @@ def mystery_wheel_cash_ev(wheel: list[dict]) -> dict:
     if denom <= 0:
         raise ValueError("mystery wheel cannot be all respins")
     ev = money_sum / denom
+    # Segment probabilities are quoted against `denom`, not n. A Spin Again pays
+    # nothing and re-draws, so what a player actually experiences is the chance the
+    # activation EVENTUALLY lands a segment -- k/denom. Quoting k/n understates
+    # every real rate by the respin share.
     return {
         "cash_ev": ev,
         "raw_money_sum": money_sum,
         "respin_segments": n_respin,
+        "absorbing_denominator": denom,
         "item_ids": items,
-        "p_grand_prize": sum(1 for s in wheel if s["f"] == "cityrp_giveitem" and s["i"] in GRAND_PRIZES) / n,
+        "segment_probability": 1 / n,
+        "p_any_item": len(items) / denom,
+        "p_grand_prize": sum(1 for s in wheel if s["f"] == "cityrp_giveitem" and s["i"] in GRAND_PRIZES) / denom,
         "segments": breakdown,
     }
 
@@ -830,7 +837,8 @@ def print_report(report: dict) -> None:
     print("=== Mystery Wheel ===")
     mw = report["mystery_wheel"]
     print(f"  Cash EV / spin: ${mw['cash_ev']:,.2f}")
-    print(f"  Grand prize P (each item segment): see segments; P(any grand)={mw['p_grand_prize']:.2%}")
+    print(f"  P(any item | activation): {mw['p_any_item']:.2%}   P(any grand prize): {mw['p_grand_prize']:.2%}"
+          f"   (quoted against {mw['absorbing_denominator']} non-respin segments)")
     print(f"  Items: {', '.join(mw['item_ids'])}")
     print()
     print("=== Machines ===")

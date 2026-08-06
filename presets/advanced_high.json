@@ -6,13 +6,13 @@
   "volatility_target": "medium",
   "bet": 25000,
   "target_rtp": 0.92,
-  "notes": "Mini-wheel: 1/12 Big Wheel. Lines capped at 40x with frequent gold/emerald pair pays buying RTP back at the bottom. Target RTP 92%. Chest weight is scaled with stake (7/14/34 on Low/Mid/High) so expected cash wagered per single-segment Mystery item is equal across the advanced machines.",
+  "notes": "Mini-wheel: 1/12 Big Wheel, 1/12 Nothing, the rest pays. Lines capped at 40x with frequent gold/emerald pair pays buying RTP back at the bottom. Target RTP 92%. Chest weight scaled with stake so expected cash wagered per single-segment Mystery item is equal across the advanced machines.",
   "hunt": {
-    "target_expected_wager_per_single_segment_item": 58000000,
-    "expected_wager": 58681217.05,
-    "expected_net_cash": -4693691.49,
-    "p_item_per_spin": 0.00042603070037612226,
-    "one_in_spins": 2347.25
+    "target_expected_wager_per_single_segment_item": 55000000,
+    "expected_wager": 55592731.94,
+    "expected_net_cash": -4447651.04,
+    "p_item_per_spin": 0.0004496990726192401,
+    "one_in_spins": 2223.71
   },
   "settings": {
     "bet": {
@@ -39,7 +39,7 @@
           "gold",
           "anything"
         ],
-        "p": 0.3508,
+        "p": 0.3361,
         "j": false
       },
       {
@@ -48,7 +48,7 @@
           "gold",
           "gold"
         ],
-        "p": 0.3508,
+        "p": 0.3361,
         "j": false
       },
       {
@@ -57,7 +57,7 @@
           "emerald",
           "anything"
         ],
-        "p": 0.5262,
+        "p": 0.5041,
         "j": false
       },
       {
@@ -66,7 +66,7 @@
           "emerald",
           "emerald"
         ],
-        "p": 0.5262,
+        "p": 0.5041,
         "j": false
       },
       {
@@ -207,34 +207,34 @@
         "p": "mystery_2"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
-        "i": 0,
-        "p": "melon"
+        "n": "$500",
+        "f": "money",
+        "i": 500,
+        "p": "dolla"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
-        "i": 0,
-        "p": "melon"
+        "n": "$500",
+        "f": "money",
+        "i": 500,
+        "p": "dolla"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
-        "i": 0,
-        "p": "melon"
+        "n": "$1,000",
+        "f": "money",
+        "i": 1000,
+        "p": "dolla"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
-        "i": 0,
-        "p": "melon"
+        "n": "$1,000",
+        "f": "money",
+        "i": 1000,
+        "p": "dolla"
       },
       {
-        "n": "Nothing",
-        "f": "nothing",
-        "i": 0,
-        "p": "melon"
+        "n": "$2,000",
+        "f": "money",
+        "i": 2000,
+        "p": "dolla"
       },
       {
         "n": "Nothing",
@@ -248,17 +248,17 @@
     }
   },
   "math": {
-    "rtp": 0.920014,
+    "rtp": 0.919996,
     "hit_rate": 0.304392,
     "bonus_rate": 0.097135,
     "p_free_spin_per_spin": 0.00809458,
     "volatility_label": "medium",
-    "volatility_cv": 3.741,
+    "volatility_cv": 3.74,
     "avg_jackpot": 117654.55,
     "mini_wheel": {
       "p_free_spin": 0.08333333333333333,
       "free_spin_count": 1,
-      "cash_ev": 15758.5,
+      "cash_ev": 16401.77,
       "segments": [
         {
           "n": "$1,250",
@@ -297,33 +297,33 @@
           "p_seg": 0.083333
         },
         {
-          "n": "Nothing",
-          "f": "nothing",
-          "i": 0,
+          "n": "$500",
+          "f": "money",
+          "i": 500,
           "p_seg": 0.083333
         },
         {
-          "n": "Nothing",
-          "f": "nothing",
-          "i": 0,
+          "n": "$500",
+          "f": "money",
+          "i": 500,
           "p_seg": 0.083333
         },
         {
-          "n": "Nothing",
-          "f": "nothing",
-          "i": 0,
+          "n": "$1,000",
+          "f": "money",
+          "i": 1000,
           "p_seg": 0.083333
         },
         {
-          "n": "Nothing",
-          "f": "nothing",
-          "i": 0,
+          "n": "$1,000",
+          "f": "money",
+          "i": 1000,
           "p_seg": 0.083333
         },
         {
-          "n": "Nothing",
-          "f": "nothing",
-          "i": 0,
+          "n": "$2,000",
+          "f": "money",
+          "i": 2000,
           "p_seg": 0.083333
         },
         {
@@ -338,30 +338,30 @@
       {
         "pattern": "gold-gold-anything",
         "probability": 0.04906156,
-        "payout": "1.35x stake",
+        "payout": "1.34x stake",
         "jackpot": false,
-        "p": 0.3508
+        "p": 0.3361
       },
       {
         "pattern": "anything-gold-gold",
         "probability": 0.04906156,
-        "payout": "1.35x stake",
+        "payout": "1.34x stake",
         "jackpot": false,
-        "p": 0.3508
+        "p": 0.3361
       },
       {
         "pattern": "emerald-emerald-anything",
         "probability": 0.0243187,
-        "payout": "1.53x stake",
+        "payout": "1.50x stake",
         "jackpot": false,
-        "p": 0.5262
+        "p": 0.5041
       },
       {
         "pattern": "anything-emerald-emerald",
         "probability": 0.0243187,
-        "payout": "1.53x stake",
+        "payout": "1.50x stake",
         "jackpot": false,
-        "p": 0.5262
+        "p": 0.5041
       },
       {
         "pattern": "gold-gold-gold",
