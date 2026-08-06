@@ -24,12 +24,14 @@ python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine adv
 
 ## Design goals (what “fair” means here)
 
-1. **Basic slots target ~95% cash RTP; advanced machines target ~90%.** Each preset carries its own `target_rtp` and the validator checks against that, not one global number.
+1. **Basic slots target ~95% cash RTP; advanced machines target ~92%.** Each preset carries its own `target_rtp` and the validator checks against that, not one global number.
 2. **Mystery Wheel items are not cash.** Cars / Dragon’s Breath / Rolex / etc. are prestige. Bound prizes use hidden `tradable=false` item meta so they cannot be given, dropped, or inventory-sold (Trabbi is the exception — still tradable as the joke prize).
 3. **Line payouts are capped at 40× stake on advanced machines**, with frequent low-multiplier gold/emerald pair pays buying the RTP back at the bottom. This is a deliberate trade: a lower headline top prize in exchange for a far smaller tail. The uncapped tables could pay $3.03M from a single spin.
-4. **Cheaper machines are currently also cheaper per prize**, not just slower. See the warning below.
+4. **Cheaper machines are slower**, not cheaper. Chest weights are tuned per machine (9 / 18 / 45 on Low / Mid / High) so that expected cash wagered per single-segment Mystery item is equal on all three — see below.
 
-> ⚠️ **Hunt costs are no longer equalised.** Expected cash wagered for a specific single-segment Mystery item is now roughly **$9.9M on Adv Low, $19.0M on Adv Mid, $45.3M on Adv High** — a 4.6× spread. Equalisation previously came from pairing a 3/2/1 Big Wheel split with per-machine chest weights; flattening both (chest 45, Big Wheel 1/12 everywhere) removed the mechanism. Advanced Low is presently the cheapest place to farm prizes, which inverts the intended progression. Re-equalising means dropping chest to ~9 on Adv Low and ~18 on Adv Mid, which would in turn move their RTP to 87.4% / 91.3% and need the pair pays re-solved.
+**Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$46.1M / $45.1M / $45.3M** on Low / Mid / High (a 1.02× spread, limited only by `chest` being an integer reel weight), for an expected net cash cost of ≈ **$3.6M** per item on any of them.
+
+All three run **1/12** Big Wheel mini-segments, so equalisation comes entirely from the chest weight: per-spin bonus rate is held proportional to the stake (2.47% / 5.06% / 12.58% against bets of $5k / $10k / $25k). One consequence worth knowing: the mini-wheel is now genuinely rare on Adv Low — roughly 1 spin in 40 — so that machine is much flatter to play than it used to be.
 
 ---
 
@@ -154,7 +156,7 @@ Then:
 E[spins until first item] = 1 / P
 E[money wagered]          = E[spins] * bet
 E[cash returned]          = E[wagered] * RTP
-E[net cash]               = E[cash returned] - E[wagered]   # ≈ -10% of wagered (advanced)
+E[net cash]               = E[cash returned] - E[wagered]   # ≈ -8% of wagered (advanced)
 ```
 
 Geometric distribution ⇒ **median** spins ≈ `ln(2) / P` (often much lower than the mean).
@@ -169,20 +171,20 @@ Geometric distribution ⇒ **median** spins ≈ `ln(2) / P` (often much lower th
 python3 casino_math.py --spins 500000
 ```
 
-Prints exact RTP, hit rate, volatility label, Monte Carlo check, a **session P&L spread**, and a rough floor stress mix. Exit code `1` if any machine is outside **its own `target_rtp` ± 0.5pp** (95% for basic slots, 90% for advanced).
+Prints exact RTP, hit rate, volatility label, Monte Carlo check, a **session P&L spread**, and a rough floor stress mix. Exit code `1` if any machine is outside **its own `target_rtp` ± 0.5pp** (95% for basic slots, 92% for advanced).
 
 ### Session P&L spread (how bad can one evening get?)
 
 RTP is a long-run average. It says nothing about what a single session looks like, and an RP economy experiences sessions, not limits. Every machine now also reports the distribution of **house** profit over a session:
 
 ```text
-advanced_high  bet=$25,000  RTP=90.00%  hit=32.8%  vol=medium (CV=3.76)
-    session P&L (1,000 spins = $25,000,000 wagered, 2,000 sims):
-      worst 1% $    -4,434,951   p05 $    -2,324,792   median $   +2,634,182   p95 $   +6,710,609
-      mean $    +2,499,633 (10.00% of wagered)   P(house down) = 17.5%
+advanced_high  bet=$25,000  RTP=92.00%  hit=32.8%  vol=medium (CV=3.68)
+    session P&L (1,000 spins = $25,000,000 wagered, 6,000 sims):
+      worst 1% $    -4,928,850   p05 $    -2,782,216   median $   +2,068,742   p95 $   +6,339,805
+                                                       P(house down) = 22.5%
 ```
 
-Read that as: the house still finishes down on **17.5%** of thousand-spin sessions, with a 1-in-100 session costing $4.4M. That is after capping lines at 40×; the uncapped table was down on 38.6% of sessions with a 1-in-100 session over **$10M**, because a 121.2× top line on a $25,000 stake pays $3.03M from one spin.
+Read that as: the house still finishes down on **22.5%** of thousand-spin sessions, with a 1-in-100 session costing $4.9M. That is *after* capping lines at 40×; the uncapped 95%-RTP table was down on 38.6% of sessions with a 1-in-100 session over **$10M**, because a 121.2× top line on a $25,000 stake pays $3.03M from one spin.
 
 ```bash
 python3 casino_math.py --session-spins 2000 --session-trials 5000   # deeper sample
@@ -225,7 +227,7 @@ Each `presets/<id>.json` has:
 
 - `settings` — exact pCasino toolgun payload (`bet`, `chance`, `combo`, `jackpot`, `wheel`, …)
 - `math` — published RTP / payline probabilities (what `/odds` shows in-game)
-- `hunt` (advanced) — expected wager for a single-segment item. `target_expected_wager_per_single_segment_item` records the original $7.5M design target, which the current presets no longer meet (see the warning under Design goals).
+- `hunt` (advanced) — equalised expected wager for a single-segment item (`target_expected_wager_per_single_segment_item` is the design target the chest weights are solved against).
 
 Machine ids:
 
@@ -236,16 +238,16 @@ Machine ids:
 ## FAQ
 
 **Why isn’t Adv Low the same chance as Adv High?**  
-It no longer is, in expected dollars. All three now run **1/12** Big Wheel mini-segments and the same chest weight (45), so the per-spin item chance is nearly identical — but the stakes differ 5×, so the *cost* per item differs 5×. Adv Low is the cheapest. See the warning under Design goals.
+In expected dollars it is. All three run **1/12** Big Wheel mini-segments, and the chest weight is scaled with the stake (9 / 18 / 45 against $5k / $10k / $25k) so the bonus rate stays proportional to what you are betting. Per-spin odds are therefore *worse* on the cheap machines, which is what keeps expected dollars-per-item aligned.
 
 **Was it always equalized?**  
-Briefly. An earlier draft made Adv Low the *most expensive* hunt; a later one equalised all three at ≈ **$7.5M** wagered per single-segment item. The current presets are **not** equalised — flattening chest weights to 45 and the Big Wheel to 1/12 removed the mechanism that produced it. Expected wager per single-segment item is now ≈ $9.9M / $19.0M / $45.3M on Low / Mid / High.
+Mostly. An earlier draft made Adv Low the *most expensive* hunt; later ones equalised all three, first at ≈ $7.5M wagered per single-segment item and now at ≈ **$45M** after the Big Wheel dropped to 1/12 on every advanced machine. The mechanism changed along the way — it used to be a 3/2/1 Big Wheel split paired with chest weights, and is now chest weight alone.
 
 **Does winning the M3 count as cash RTP?**  
 No. You still “pay” via the ~5% house edge on all the cash you cycled to get there.
 
 **What about the $500k Mystery cash prize?**  
-It’s real money and is included in Mystery cash EV (~$49k per spin including respins). Advanced machines are tuned so overall cash RTP lands on ~90%.
+It’s real money and is included in Mystery cash EV (~$49k per spin including respins). Advanced machines are tuned so overall cash RTP lands on ~92%.
 
 **Casino-bound items**  
 i8, Gold Rolex, Stolen Police Uniform, and Magical Cake are granted with hidden metadata `tradable=false`. Give / drop / inventory-sell are blocked. Trabbi is not bound. M3 / Ninja / Dragon’s Breath / Golden Vape are already locked in their item definitions.
