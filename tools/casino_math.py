@@ -59,6 +59,9 @@ def pick_combo(combos: list[dict], a: str, b: str, c: str, jackpot_on: bool) -> 
         if win is not None:
             if jackpot_on and win.get("j") and not combo.get("j"):
                 continue
+            if jackpot_on and combo.get("j") and not win.get("j"):
+                win = combo
+                continue
             if float(win.get("p", 0)) > float(combo.get("p", 0)):
                 continue
         win = combo
