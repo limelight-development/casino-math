@@ -20,6 +20,15 @@ python3 casino_math.py --hunt bmwm3gtr46 --skip-rtp
 python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine advanced_mid --machine advanced_high --skip-rtp
 ```
 
+Two maintenance commands rewrite the presets rather than just reporting on them:
+
+```bash
+python3 casino_math.py --refresh-presets --skip-rtp   # recompute published math/hunt from settings
+python3 casino_math.py --retune-advanced --skip-rtp   # solve advanced cash p for target_rtp, then refresh
+```
+
+`--refresh-presets` is the one to reach for after **any** settings change. The `math` block is what `/odds` renders in-game, so it goes stale the moment weights, combos, wheel segments — or the payout-selection rules themselves — change, and nothing else catches that.
+
 ---
 
 ## Design goals (what “fair” means here)
@@ -33,11 +42,13 @@ python3 casino_math.py --hunt kawasakininja --machine advanced_low --machine adv
 5. **Losing is part of the design.** The mini-wheel keeps one `Nothing` segment, the Mystery Wheel keeps one `Nothing` plus the `$1` and Trabant joke prizes. A bonus that always pays is not exciting — there has to be a real chance of walking away with nothing.
 6. **Basic-slot jackpots reset often enough to stay a prize, not a lottery.** They fire roughly 1 spin in 1,260 / 946 / 729 on Low / Mid / High, holding the pot near 50× stake instead of the 942–5005× it reached when the pot ran for tens of thousands of spins. The pot is a running counter — `startValue + bet × betAdd × spins_since_last_hit` — so its size is set by how often it resets, and it is paid outside the line cap.
 
-**Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$55.9M / $54.5M / $55.6M** on Low / Mid / High (a 1.03× spread), for an expected net cash cost of ≈ **$4.4M** per item on any of them.
+**Hunt costs are equalised across the advanced machines.** Expected cash wagered for a specific single-segment Mystery item is ≈ **$50.1M / $49.3M / $51.3M** on Low / Mid / High (a 1.04× spread), for an expected net cash cost of ≈ **$4.0M** per item on any of them.
 
-All three run **1/12** Big Wheel mini-segments, so equalisation comes entirely from the chest weight: per-spin bonus rate is held proportional to the stake (1.93% / 3.97% / 9.71% against bets of $5k / $10k / $25k). The residual spread is integer granularity — one unit of chest moves Adv Mid by about 7%, so 1.03× is the closest reachable without inflating every weight on the reel.
+All three run **1/12** Big Wheel mini-segments, so equalisation comes entirely from the chest weight: per-spin bonus rate is held proportional to the stake (2.16% / 4.38% / 10.53% against bets of $5k / $10k / $25k). The residual spread is integer granularity — one unit of chest moves Adv Mid by about 7%, so 1.04× is the closest reachable without inflating every weight on the reel.
 
-One interaction worth knowing: **the bonus rate also sets the jackpot pot.** The pot grows by `bet * betAdd` every spin and only resets when the mini-wheel lands its jackpot segment, so a rarer bonus means a longer accumulation. At these weights the pot averages **$98k / $101k / $118k** — about 20× / 10× / 5× the stake. Push the bonus rate much lower and the pot balloons past the 40× line cap and becomes the dominant tail again; at a 0.28% bonus on Adv Low it reached $649k, or 130× stake.
+These figures dropped from ≈$55M in earlier revisions of this doc. That is the [tie-break fix](#choosing-the-winning-combo) landing: chest combos used to lose the payout comparison to overlapping cash combos, so roughly a tenth of qualifying spins never awarded the mini-wheel at all. Paying every chest that lands raises the real bonus rate, which shortens the hunt. The chest weights themselves are unchanged.
+
+One interaction worth knowing: **the bonus rate also sets the jackpot pot.** The pot grows by `bet * betAdd` every spin and only resets when the mini-wheel lands its jackpot segment, so a rarer bonus means a longer accumulation. At these weights the pot averages **$88k / $92k / $110k** — about 18× / 9× / 4× the stake. Push the bonus rate much lower and the pot balloons past the 40× line cap and becomes the dominant tail again; at a 0.28% bonus on Adv Low it reached $649k, or 130× stake.
 
 ---
 
@@ -74,6 +85,8 @@ Per-reel probability of symbol `s` is `weight[s] / sum(weights)`.
 **Lua** (`CheckForCombo`): walk the combo list; keep the best match. Patterns may use `"anything"`. If jackpots are on, a jackpot/`j=true` combo beats a cash combo when both match (chest / dollar lines).
 
 **Python:** `pick_combo()` copies that preference order (`j` preferred, else higher `p`).
+
+The jackpot preference has to hold **regardless of which combo the walk reaches first**. Jackpot combos carry `p = 0` (their reward is the wheel spin, not cash), so a "higher `p` wins" rule alone always hands the spin to an overlapping cash combo. `coin, coin, chest` matches both `coin-coin-anything` and `anything-anything-chest`; before this was fixed the cash line won and the mini-wheel was silently dropped. Both sides now short-circuit on `j` before comparing `p`.
 
 ### 4) Cash line payout
 
