@@ -19,6 +19,7 @@ pCasino payout model (slots):
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import math
 import random
@@ -58,6 +59,9 @@ def pick_combo(combos: list[dict], a: str, b: str, c: str, jackpot_on: bool) -> 
             continue
         if win is not None:
             if jackpot_on and win.get("j") and not combo.get("j"):
+                continue
+            if jackpot_on and combo.get("j") and not win.get("j"):
+                win = combo
                 continue
             if float(win.get("p", 0)) > float(combo.get("p", 0)):
                 continue
@@ -1124,6 +1128,137 @@ def list_mystery_items() -> None:
             print(f"  {seg['i']:24}  label={seg['n']!r}")
 
 
+LINE_CAP = {"basic": 60.0, "advanced": 40.0}
+HUNT_REFERENCE_ITEM = "kawasakininja"  # any single-segment Mystery item gives the same wager
+
+
+def _scale_cash_p(settings: dict, factor: float, cap: float) -> None:
+    """Scale every cash combo's p by factor in place, clamped at the tier's line cap.
+
+    Uniform scaling preserves the relative order of p across combos, so which combo
+    wins any given reel triple is unchanged -- the per-combo win probabilities stay
+    fixed and RTP is exactly affine in factor. That keeps the deliberate payline
+    shape (frequent low pays buying RTP back at the bottom) instead of picking
+    winners among combos.
+    """
+    for combo in settings["combo"]:
+        if combo.get("j"):
+            continue
+        combo["p"] = min(cap, round(float(combo["p"]) * factor, 4))
+
+
+def solve_cash_scale(preset: dict, big_wheel_ev: float, target: float) -> float:
+    """Bisect for the cash-p scale factor that lands this machine on target RTP."""
+    cap = LINE_CAP["advanced" if preset["tier"] == "advanced" else "basic"]
+    lo, hi = 0.1, 10.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        trial = copy.deepcopy(preset["settings"])
+        _scale_cash_p(trial, mid, cap)
+        rtp = exact_wheel_slot(trial, big_wheel_ev)["rtp"]
+        if rtp < target:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+def _payline_block(paylines: list[dict]) -> list[dict]:
+    return [
+        {
+            "pattern": pl["pattern"],
+            "probability": round(pl["probability"], 8),
+            "payout": pl["payout"],
+            "jackpot": pl["jackpot"],
+            "p": pl["p"],
+        }
+        for pl in paylines
+    ]
+
+
+def build_math_block(exact: dict) -> dict:
+    """Rebuild a preset's published `math` block from its exact analysis."""
+    if exact["type"] == "basic_slot":
+        return {
+            "rtp": round(exact["rtp"], 6),
+            "hit_rate": round(exact["hit_rate"], 6),
+            "jackpot_hit_rate": round(exact["jackpot_hit_rate"], 8),
+            "volatility_label": exact["volatility_label"],
+            "volatility_cv": round(exact["volatility_cv"], 3),
+            "avg_jackpot_at_hit": round(exact["avg_jackpot_at_hit"], 2),
+            "jackpot_rtp": round(exact["jackpot_rtp"], 6),
+            "cash_rtp": round(exact["cash_rtp"], 6),
+            "paylines": _payline_block(exact["paylines"]),
+        }
+    mini = exact["mini_wheel"]
+    return {
+        "rtp": round(exact["rtp"], 6),
+        "hit_rate": round(exact["hit_rate"], 6),
+        "bonus_rate": round(exact["bonus_rate"], 6),
+        "p_free_spin_per_spin": round(exact["p_free_spin_per_spin"], 8),
+        "volatility_label": exact["volatility_label"],
+        "volatility_cv": round(exact["volatility_cv"], 3),
+        "avg_jackpot": round(exact["avg_jackpot"], 2),
+        "mini_wheel": {
+            "p_free_spin": mini["p_free_spin"],
+            "free_spin_count": mini["free_spin_count"],
+            "cash_ev": round(mini["cash_ev"], 2),
+            "segments": [
+                {"n": s["n"], "f": s["f"], "i": s["i"], "p_seg": round(1 / len(exact["segments_src"]), 6)}
+                for s in exact["segments_src"]
+            ],
+        },
+        "paylines": _payline_block(exact["paylines"]),
+    }
+
+
+def build_hunt_block(preset: dict, mystery: dict) -> dict:
+    h = hunt_exact(preset, mystery, HUNT_REFERENCE_ITEM)
+    return {
+        "target_expected_wager_per_single_segment_item": preset["hunt"][
+            "target_expected_wager_per_single_segment_item"
+        ],
+        "expected_wager": round(h["expected_wagered"], 2),
+        "expected_net_cash": round(h["expected_net_cash"], 2),
+        "p_item_per_spin": h["p_item_per_spin"],
+        "one_in_spins": round(h["one_in_spins"], 2),
+    }
+
+
+def refresh_presets(retune: bool = False) -> None:
+    """Recompute every preset's derived `math` (and `hunt`) block from its settings.
+
+    The published blocks are what /odds renders in-game, so they go stale the moment
+    payout selection or any setting changes -- exactly what happened when the
+    jackpot-vs-cash tie-break was fixed. Run this after any settings change.
+    """
+    presets, mystery = load_presets()
+    bw = mystery_wheel_cash_ev(mystery["settings"]["wheel"])["cash_ev"]
+
+    if retune:
+        for pid, preset in presets.items():
+            if preset["entity"] != "pcasino_wheel_slot_machine":
+                continue
+            target = float(preset["target_rtp"])
+            factor = solve_cash_scale(preset, bw, target)
+            _scale_cash_p(preset["settings"], factor, LINE_CAP["advanced"])
+            print(f"  {pid}: cash p x{factor:.4f} -> target {target*100:.2f}%")
+
+    for pid, preset in presets.items():
+        path = PRESETS_DIR / f"{pid}.json"
+        if preset["entity"] == "pcasino_mystery_wheel":
+            continue
+        if preset["entity"] == "pcasino_slot_machine":
+            exact = exact_basic_slot(preset["settings"])
+        else:
+            exact = exact_wheel_slot(preset["settings"], bw)
+            exact["segments_src"] = preset["settings"]["wheel"]
+            preset["hunt"] = build_hunt_block(preset, mystery)
+        preset["math"] = build_math_block(exact)
+        path.write_text(json.dumps(preset, indent=2) + "\n")
+        print(f"  wrote {path.name}: RTP {preset['math']['rtp']*100:.3f}%")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -1164,11 +1299,24 @@ examples:
     parser.add_argument("--hunt-trials", type=int, default=1500, help="MC hunt trials per machine (0=exact only)")
     parser.add_argument("--list-items", action="store_true", help="List Mystery Wheel item ids")
     parser.add_argument("--skip-rtp", action="store_true", help="Skip full RTP report (useful with --hunt)")
+    parser.add_argument(
+        "--refresh-presets",
+        action="store_true",
+        help="Recompute every preset's published math/hunt block from its settings",
+    )
+    parser.add_argument(
+        "--retune-advanced",
+        action="store_true",
+        help="Solve advanced-machine cash p for target_rtp, then refresh presets",
+    )
     args = parser.parse_args()
 
     if args.list_items:
         list_mystery_items()
         return
+
+    if args.refresh_presets or args.retune_advanced:
+        refresh_presets(retune=args.retune_advanced)
 
     if args.emit_lua:
         emit_lua(args.emit_lua)
